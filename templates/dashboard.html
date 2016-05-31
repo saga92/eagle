@@ -5,9 +5,10 @@
   <h1>eagle</h1>
   <div class=metanav>
   {% if not session.is_login %}
-    <a href="{{ url_for('login') }}">log in</a>
+    <a href="{{ url_for('sign_in') }}">sign in</a>
+    <a href="{{ url_for('sign_up') }}">sign up</a>
   {% else %}
-    <a href="{{ url_for('logout') }}">log out</a>
+    <a href="{{ url_for('sign_out') }}">sign out</a>
   {% endif %}
   </div>
 </div>
