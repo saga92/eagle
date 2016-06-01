@@ -1,14 +1,15 @@
 {% extends "layout.html" %}
 {% block body %}
-  {% if session.logged_in %}
-    <form action="{{ url_for('create-instance') }}" method=post class=create-instance>
+  {% if session.is_login %}
+    <form action="{{ url_for('create_instance') }}" method=post class=create-instance>
         <input type="hidden" name="user_id" value="{{ session.signin_user_id }}"/>
+        <input type="hidden" name="image_id" value="1"/>
         <input type=submit value=create>
     </form>
-    <form action="{{ url_for('create-instance') }}" method=post class=create-instance>
+    <form action="{{ url_for('create_instance') }}" method=post class=create-instance>
         <input type=submit value=stop>
     </form>
-    <form action="{{ url_for('create-instance') }}" method=post class=create-instance>
+    <form action="{{ url_for('create_instance') }}" method=post class=create-instance>
         <input type=submit value=remove>
     </form>
   {% endif %}

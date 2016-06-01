@@ -6,8 +6,8 @@ from flask import request, render_template, url_for, session, flash, redirect
 import datetime
 from utils import logger
 
-@app.route('/create_instance/<image_id>', methods=['GET', 'POST'])
-def create_instance(image_id):
-    logger.info(image_id)
+@app.route('/create_instance', methods=['GET', 'POST'])
+def create_instance():
     if request.method == 'POST':
-        logger.info(image_id)
+        logger.info(request.form['image_id'])
+    return render_template('dashboard.html')
