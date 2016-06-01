@@ -1,3 +1,5 @@
+{% extends "layout.html" %}
+{% block body %}
 {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
   <form action="{{ url_for('sign_in') }}" method=post>
     <dl>
@@ -8,3 +10,4 @@
       <dd><input type=submit value='Sign in'>
     </dl>
   </form>
+{% endblock %}

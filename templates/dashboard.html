@@ -1,14 +1,15 @@
-<!doctype html>
-<title>eagle</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-<div class=page>
-  <h1>eagle</h1>
-  <div class=metanav>
-  {% if not session.is_login %}
-    <a href="{{ url_for('sign_in') }}">sign in</a>
-    <a href="{{ url_for('sign_up') }}">sign up</a>
-  {% else %}
-    <a href="{{ url_for('sign_out') }}">sign out</a>
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+    <form action="{{ url_for('create-instance') }}" method=post class=create-instance>
+        <input type="hidden" name="user_id" value="{{ session.signin_user_id }}"/>
+        <input type=submit value=create>
+    </form>
+    <form action="{{ url_for('create-instance') }}" method=post class=create-instance>
+        <input type=submit value=stop>
+    </form>
+    <form action="{{ url_for('create-instance') }}" method=post class=create-instance>
+        <input type=submit value=remove>
+    </form>
   {% endif %}
-  </div>
-</div>
+{% endblock %}

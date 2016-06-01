@@ -11,9 +11,9 @@ class User(db.Model):
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)
     salt = db.Column(db.String(128), nullable=False)
-    create_time = db.Column(db.DateTime)
-    update_time = db.Column(db.DateTime)
-    is_deleted = db.Column(db.Integer)
+    create_time = db.Column(db.DateTime, nullable=False)
+    update_time = db.Column(db.DateTime, nullable=False)
+    is_deleted = db.Column(db.Integer, nullable=False)
 
     def __init__(self, username, password, *args, **kargs):
         self.username = username

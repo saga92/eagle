@@ -1,0 +1,18 @@
+<!doctype html>
+<title>Eagle</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<div class=page>
+  <h1>Eagle--Docker cloud computing</h1>
+  <div class=metanav>
+  {% if not session.is_login %}
+    <a href="{{ url_for('sign_in') }}">sign in</a>
+    <a href="{{ url_for('sign_up') }}">sign up</a>
+  {% else %}
+    <a href="{{ url_for('sign_out') }}">sign out</a>
+  {% endif %}
+  </div>
+  {% for message in get_flashed_messages() %}
+    <div class=flash>{{ message }}</div>
+  {% endfor %}
+  {% block body %}{% endblock %}
+</div>

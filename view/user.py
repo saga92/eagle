@@ -9,6 +9,7 @@ import time
 import random
 import datetime
 from utils import logger
+from sqlalchemy import or_
 
 @app.route('/', methods=['GET', 'POST'])
 def show_dashboard():
@@ -18,14 +19,15 @@ def show_dashboard():
 def sign_in():
     error = None
     if request.method == 'POST':
-        result = User.query.filter(User.username == request.form['username']\
-            or User.email == request.form['username']).first()
+        result = User.query.filter(or_(User.username == request.form['username']\
+            , User.email == request.form['username'])).first()
         if result is None:
             error = 'Username not found.'
         else:
             passcode = hashlib.md5(request.form['password'] + result.salt).hexdigest()
             if result.password == passcode:
                 session['is_login'] = True
+                session['signin_user_id'] = request.form['username']
                 flash('You have logged in')
                 return redirect(url_for('show_dashboard'))
             else:
@@ -58,5 +60,5 @@ def sign_up():
                 salt=salt, create_time=datetime.datetime.now(), update_time=datetime.datetime.now())
             db.session.add(u)
             db.session.commit()
-            return redirect(url_for('show_dashboard'))
+            return redirect(url_for('sign_in'))
     return render_template('signup.html', error=error)

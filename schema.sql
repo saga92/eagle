@@ -38,6 +38,6 @@ create table `instance` (
     `update_time` datetime not null default '0000-00-00 00:00' comment 'update_time',
     `is_deleted` tinyint(3) not null default '0' comment '1:deleted',
     primary key (`id`),
-    key `idx_container_id` (`container_serial`),
+    key `idx_container_serial` (`container_serial`),
     key `idx_is_deleted` (`is_deleted`)
 )engine=InnoDB DEFAULT CHARSET=utf8 comment 'instance';
