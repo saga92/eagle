@@ -1,11 +1,19 @@
 {% extends "layout.html" %}
 {% block body %}
   {% if session.is_login %}
+  <p>Create your container:</p>
     <form action="{{ url_for('create_instance') }}" method=post class=create-instance>
+        <select id="s1_text1_bold">
+            <option value="0" selected>please select:</option>
+            <option value="1">1.ubuntu</option>
+            <option value="2">2.centos</option>
+        </select>
+        <input type="text" name="container_name" value="dev-container"/>
         <input type="hidden" name="user_id" value="{{ session.signin_user_id }}"/>
         <input type="hidden" name="image_id" value="1"/>
-        <input type=submit value=create>
+        <input type="submit" class="sub_btn" value="create">
     </form>
+  <p>Instance dashboard:</p>
     <form action="{{ url_for('create_instance') }}" method=post class=create-instance>
         <input type=submit value=stop>
     </form>

@@ -24,3 +24,12 @@ class Instance(db.Model):
     create_time = db.Column(db.DateTime, nullable=False)
     update_time = db.Column(db.DateTime, nullable=False)
     is_deleted = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, image_id, user_id, container_serial, status, **kargs):
+        self.image_id = image_id
+        self.user_id = user_id
+        self.container_serial = container_serial
+        self.status = status
+        self.create_time = kargs.get('create_time', '0000-00-00 00:00')
+        self.update_time = kargs.get('update_time', '0000-00-00 00:00')
+        self.is_deleted = kargs.get('is_deleted', 0)

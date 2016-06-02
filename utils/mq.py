@@ -12,7 +12,6 @@ class MessageQueue:
     @classmethod
     def connect(cls):
         if cls.connection is None or cls.connection.is_closed is True:
-            print cls.__name__, "connect is None"
             cred = pika.credentials.PlainCredentials(app.config['MQ_USERNAME'], app.config['MQ_PASSWORD'])
             parameter = pika.ConnectionParameters(host=app.config['MQ_HOST'], port=app.config['MQ_PORT'], credentials=cred)
             cls.connection = pika.BlockingConnection(parameters=parameter)

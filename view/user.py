@@ -8,8 +8,8 @@ import hashlib
 import time
 import random
 import datetime
-from utils import logger
 from sqlalchemy import or_
+from utils import logger
 
 @app.route('/', methods=['GET', 'POST'])
 def show_dashboard():
