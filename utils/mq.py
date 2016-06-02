@@ -2,18 +2,20 @@
 # -*- coding: utf-8 -*-
 
 import pika
-from eagle import app
+import imp
 
 class MessageQueue:
 
     connection = None
     channel = None
 
+    app_conf = imp.load_source('app_conf', '../eagle.cfg')
+
     @classmethod
     def connect(cls):
         if cls.connection is None or cls.connection.is_closed is True:
-            cred = pika.credentials.PlainCredentials(app.config['MQ_USERNAME'], app.config['MQ_PASSWORD'])
-            parameter = pika.ConnectionParameters(host=app.config['MQ_HOST'], port=app.config['MQ_PORT'], credentials=cred)
+            cred = pika.credentials.PlainCredentials(cls.app_conf.MQ_USERNAME, cls.app_conf.MQ_PASSWORD)
+            parameter = pika.ConnectionParameters(host=cls.app_conf.MQ_HOST, port=cls.app_conf.MQ_PORT, credentials=cred)
             cls.connection = pika.BlockingConnection(parameters=parameter)
             cls.channel = cls.connection.channel()
 

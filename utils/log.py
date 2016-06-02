@@ -4,17 +4,21 @@
 import logging
 from logging.handlers import RotatingFileHandler
 from logging import Formatter
-from eagle import app
+import imp
+
+app_conf = imp.load_source('app_conf', '../eagle.cfg')
+
+eagle_logger = logging.getLogger('eagle')
 
 formatter = Formatter(
     '%(asctime)s %(levelname)s: %(message)s '
     '[in %(pathname)s:%(lineno)d]'
 )
-handler = RotatingFileHandler(app.config['LOG_FILENAME'], maxBytes=10000000, backupCount=2)
+handler = RotatingFileHandler(app_conf.LOG_FILENAME, maxBytes=10000000, backupCount=2)
 handler.setLevel(logging.DEBUG)
 handler.setFormatter(formatter)
-app.logger.addHandler(handler)
-logger = app.logger
+
+eagle_logger.addHandler(handler)
 
 if __name__ == '__main__':
-    app.logger.error('test')
+    eagle_logger.error('test')
