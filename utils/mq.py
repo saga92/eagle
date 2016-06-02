@@ -3,13 +3,14 @@
 
 import pika
 import imp
+import os
 
 class MessageQueue:
 
     connection = None
     channel = None
 
-    app_conf = imp.load_source('app_conf', '../eagle.cfg')
+    app_conf = imp.load_source('app_conf', os.getenv('EAGLE_HOME', None) + '/eagle.cfg')
 
     @classmethod
     def connect(cls):
