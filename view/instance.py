@@ -20,7 +20,7 @@ def create_instance():
             policy['operate'] = app.config['CREATE_INSTANCE']
             policy['image_id'] = request.form['image_id']
             policy['container_name'] = request.form['container_name']
-            policy['user_name'] = request.form['user_id']
+            policy['user_name'] = request.form['user_name']
             message = json.dumps(policy)
             MessageQueue.connect()
             MessageQueue.send(message)
@@ -54,7 +54,7 @@ def stop_instance():
             policy = {}
             policy['operate'] = app.config['STOP_INSTANCE']
             policy['container_serial'] = request.form['container_serial']
-            policy['user_id'] = request.form['user_id']
+            policy['user_name'] = request.form['user_name']
             message = json.dumps(policy)
             MessageQueue.connect()
             MessageQueue.send(message)
@@ -77,14 +77,13 @@ def stop_instance_res():
 @app.route('/remove_ins', methods=['GET', 'POST'])
 def remove_instance():
     if request.method == 'POST':
-        eagle_logger.info('xx1')
         instance_query_result = Instance.query.filter(\
             Instance.container_serial == request.form['container_serial']).first()
         if instance_query_result is not None:
             policy = {}
             policy['operate'] = app.config['REMOVE_INSTANCE']
             policy['container_serial'] = request.form['container_serial']
-            policy['user_id'] = request.form['user_id']
+            policy['user_name'] = request.form['user_name']
             message = json.dumps(policy)
             MessageQueue.connect()
             MessageQueue.send(message)
