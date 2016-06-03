@@ -12,17 +12,26 @@ from model import User
 
 @app.route('/create_ins', methods=['GET', 'POST'])
 def create_instance():
+    popup = None
     if request.method == 'POST':
-        policy = {}
-        policy['operate'] = app.config['CREATE_INSTANCE']
-        policy['image_id'] = request.form['image_id']
-        policy['container_name'] = request.form['container_name']
-        policy['user_name'] = request.form['user_id']
-        message = json.dumps(policy)
-        MessageQueue.connect()
-        MessageQueue.send(message)
-        MessageQueue.disconnect()
-    return render_template('dashboard.html', popup='creating your docker VM')
+        instance_query_result = Instance.query.filter(\
+            Instance.container_name == request.form['container_name']).first()
+        if instance_query_result is None:
+            policy = {}
+            policy['operate'] = app.config['CREATE_INSTANCE']
+            policy['image_id'] = request.form['image_id']
+            policy['container_name'] = request.form['container_name']
+            policy['user_name'] = request.form['user_id']
+            message = json.dumps(policy)
+            MessageQueue.connect()
+            MessageQueue.send(message)
+            MessageQueue.disconnect()
+            popup = 'creating your docker VM'
+        else:
+            popup = 'container name occupied.'
+    if popup is None:
+        popup = 'some unknown problems occur.'
+    return render_template('dashboard.html', popup=popup)
 
 @app.route('/create_ins_res', methods=['GET', 'POST'])
 def update_instance_status():
