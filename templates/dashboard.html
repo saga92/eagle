@@ -16,6 +16,7 @@
     </form>
   <p>Instance dashboard:</p>
     <table>
+      {% if instances %}
       <tr>
         <th>vm serial</th> 
         <th>image_id</th>
@@ -24,6 +25,7 @@
         <th>status</th>
         <th>operate</th>
       </tr>
+      
       {% for instance in instances %}
       <tr>
         <td>{{instance.container_serial}}</td>
@@ -45,6 +47,9 @@
         </td>
       </tr>
       {% endfor %}
+      {%else%}
+      <p> you have no instance.
+     {% endif %}
     </table>
     <div>{{ message_box }}</div>
     

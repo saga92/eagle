@@ -14,7 +14,11 @@ from utils import eagle_logger
 
 @app.route('/', methods=['GET', 'POST'])
 def show_dashboard():
-    instances = Instance.query.all()
+    instances = None
+    eagle_logger.info(session.get('signin_user_id'))
+    user_query_result = User.query.filter(User.username == session.get('signin_user_name', '')).first()
+    if user_query_result is not None:
+        instances = Instance.query.filter(Instance.user_id == user_query_result.id).all()
     return render_template('dashboard.html', instances=instances)
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -29,10 +33,10 @@ def sign_in():
             passcode = hashlib.md5(request.form['password'] + result.salt).hexdigest()
             if result.password == passcode:
                 session['is_login'] = True
-                session['signin_user_id'] = request.form['username']
+                session['signin_user_name'] = request.form['username']
                 flash('You have logged in')
                 instances = Instance.query.all()
-                return redirect(url_for('show_dashboard', instances=instances))
+                return redirect(url_for('show_dashboard'))
             else:
                 error = 'wrong password.'
     return render_template('signin.html', error=error)
