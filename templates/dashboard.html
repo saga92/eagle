@@ -12,6 +12,7 @@
         <input type="hidden" name="user_id" value="{{ session.signin_user_id }}"/>
         <input type="hidden" name="image_id" value="1"/>
         <input type="submit" class="sub_btn" value="create">
+        <div>{{ popup }}</div>
     </form>
   <p>Instance dashboard:</p>
     <form action="{{ url_for('create_instance') }}" method=post class=create-instance>

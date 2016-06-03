@@ -32,12 +32,16 @@ create table `instance` (
     `id` int(11) not null auto_increment,
     `image_id` int(11) not null default '0' comment 'image id fk of image',
     `user_id` int(11) not null default '0' comment 'user id fk of user',
+    `container_name` varchar(128) not null default '' comment 'container name',
     `container_serial` varchar(128) not null default '' comment 'container serial',
-    `status` tinyint(3) not null default '0' comment '0:running 1:stop 2:unknown',
+    `host` varchar(128) not null default '' comment 'container host ip',
+    `port` int(11) not null default '0' comment 'container host port',
+    `status` tinyint(3) not null default '0' comment '1:running 2:stop 3:unknown',
     `create_time` datetime not null default '0000-00-00 00:00' comment 'create_time',
     `update_time` datetime not null default '0000-00-00 00:00' comment 'update_time',
     `is_deleted` tinyint(3) not null default '0' comment '1:deleted',
     primary key (`id`),
+    key `idx_container_name` (`container_name`),
     key `idx_container_serial` (`container_serial`),
     key `idx_is_deleted` (`is_deleted`)
 )engine=InnoDB DEFAULT CHARSET=utf8 comment 'instance';

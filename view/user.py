@@ -9,7 +9,7 @@ import time
 import random
 import datetime
 from sqlalchemy import or_
-from utils import logger
+from utils import eagle_logger
 
 @app.route('/', methods=['GET', 'POST'])
 def show_dashboard():
