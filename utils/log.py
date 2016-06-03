@@ -9,7 +9,7 @@ import os
 
 eagle_home = os.getenv('EAGLE_HOME', None)
 
-app_conf = imp.load_source('app_conf', eagle_home + '/eagle.cfg')
+app_conf = imp.load_source('app_conf', eagle_home + '/eagle_cfg.py')
 
 eagle_logger = logging.getLogger('eagle')
 
