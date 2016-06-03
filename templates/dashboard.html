@@ -15,11 +15,38 @@
         <div>{{ popup }}</div>
     </form>
   <p>Instance dashboard:</p>
-    <form action="{{ url_for('create_instance') }}" method=post class=create-instance>
-        <input type=submit value=stop>
-    </form>
-    <form action="{{ url_for('create_instance') }}" method=post class=create-instance>
-        <input type=submit value=remove>
-    </form>
+    <table>
+      <tr>
+        <th>vm serial</th> 
+        <th>image_id</th>
+        <th>host</th>
+        <th>port</th>
+        <th>status</th>
+        <th>operate</th>
+      </tr>
+      {% for instance in instances %}
+      <tr>
+        <td>{{instance.container_serial}}</td>
+        <td>{{instance.image_id}}</td> 
+        <td>{{instance.host}}</td>
+        <td>{{instance.port}}</td>
+        <td>{{instance.status}}</td>
+        <td>
+            <form action="{{ url_for('stop_instance') }}" method=post class=create-instance>
+                <input type="hidden" name="container_serial" value="{{ instance.container_serial }}">
+                <input type="hidden" name="user_id" value="{{ session.signin_user_id  }}">
+                <input type=submit value=stop>
+            </form>
+            <form action="{{ url_for('remove_instance') }}" method=post class=create-instance>
+                <input type="hidden" name="container_serial" value="{{ instance.container_serial }}">
+                <input type="hidden" name="user_id" value="{{ session.signin_user_id  }}">
+                <input type=submit value=remove>
+            </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <div>{{ message_box }}</div>
+    
   {% endif %}
 {% endblock %}

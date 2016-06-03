@@ -23,3 +23,5 @@ LOG_PATH = '/root/proj/eagle'
 
 ##local configuration
 CREATE_INSTANCE = 1
+STOP_INSTANCE = 2
+REMOVE_INSTANCE = 3

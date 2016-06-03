@@ -4,6 +4,7 @@
 from eagle import app, db
 from flask import request, render_template, url_for, session, flash, redirect
 from model import User
+from model import Instance
 import hashlib
 import time
 import random
@@ -13,7 +14,8 @@ from utils import eagle_logger
 
 @app.route('/', methods=['GET', 'POST'])
 def show_dashboard():
-    return render_template('dashboard.html')
+    instances = Instance.query.all()
+    return render_template('dashboard.html', instances=instances)
 
 @app.route('/signin', methods=['GET', 'POST'])
 def sign_in():
@@ -29,7 +31,8 @@ def sign_in():
                 session['is_login'] = True
                 session['signin_user_id'] = request.form['username']
                 flash('You have logged in')
-                return redirect(url_for('show_dashboard'))
+                instances = Instance.query.all()
+                return redirect(url_for('show_dashboard', instances=instances))
             else:
                 error = 'wrong password.'
     return render_template('signin.html', error=error)
