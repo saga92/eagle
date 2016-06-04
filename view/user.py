@@ -14,6 +14,7 @@ from utils import eagle_logger
 
 @app.route('/', methods=['GET', 'POST'])
 def show_dashboard():
+    eagle_logger.info('test')
     instances = None
     eagle_logger.info(session.get('signin_user_name'))
     user_query_result = User.query.filter(User.username == session.get('signin_user_name', '')).first()
