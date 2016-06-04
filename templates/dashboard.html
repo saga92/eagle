@@ -9,7 +9,7 @@
             <option value="2">2.centos</option>
         </select>
         <input type="text" name="container_name" value="dev-container"/>
-        <input type="hidden" name="user_id" value="{{ session.signin_user_id }}"/>
+        <input type="hidden" name="user_name" value="{{ session.signin_user_name }}"/>
         <input type="hidden" name="image_id" value="1"/>
         <input type="submit" class="sub_btn" value="create">
         <div>{{ popup }}</div>
@@ -36,12 +36,12 @@
         <td>
             <form action="{{ url_for('stop_instance') }}" method=post class=create-instance>
                 <input type="hidden" name="container_serial" value="{{ instance.container_serial }}">
-                <input type="hidden" name="user_id" value="{{ session.signin_user_id  }}">
+                <input type="hidden" name="user_name" value="{{ session.signin_user_name  }}">
                 <input type=submit value=stop>
             </form>
             <form action="{{ url_for('remove_instance') }}" method=post class=create-instance>
                 <input type="hidden" name="container_serial" value="{{ instance.container_serial }}">
-                <input type="hidden" name="user_id" value="{{ session.signin_user_id  }}">
+                <input type="hidden" name="user_name" value="{{ session.signin_user_name  }}">
                 <input type=submit value=remove>
             </form>
         </td>

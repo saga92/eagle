@@ -20,8 +20,12 @@ class Client(MessageQueue):
             remove_container(cli, **policy)
 
 def connect_docker_cli():
-    from docker import Client
-    cli = Client(base_url=worker_cfg.DOCKER_CLI_URL)
+    if worker_cfg.MAC:
+        import docker
+        cli = docker.from_env(assert_hostname=False)
+    else:
+        from docker import Client
+        cli = Client(base_url=worker_cfg.DOCKER_CLI_URL)
     return cli
 
 def create_run_container(cli, *args, **kwargs):
