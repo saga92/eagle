@@ -10,7 +10,7 @@ class MessageQueue:
     connection = None
     channel = None
 
-    app_conf = imp.load_source('app_conf', os.getenv('EAGLE_HOME', None) + '/eagle_cfg.py')
+    app_conf = imp.load_source('app_conf', os.getenv('EAGLE_HOME', '..') + '/eagle_cfg.py')
 
     @classmethod
     def connect(cls):
