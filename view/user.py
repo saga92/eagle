@@ -34,7 +34,7 @@ def sign_in():
             passcode = hashlib.md5(request.form['password'] + result.salt).hexdigest()
             if result.password == passcode:
                 session['is_login'] = True
-                session['signin_user_name'] = request.form['username']
+                session['signin_user_name'] = result.username
                 flash('You have logged in')
                 instances = Instance.query.all()
                 return redirect(url_for('show_dashboard'))
