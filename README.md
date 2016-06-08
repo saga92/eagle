@@ -2,7 +2,7 @@
 
 > docker cloud computing solution
 
-### Prepare:
+### Prepare
 
 + set your eagle home env
 ```
