@@ -3,5 +3,4 @@ Flask-SQLAlchemy
 mysql-python
 pika
 docker-py
-json
 requests
