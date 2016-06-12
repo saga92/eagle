@@ -4,7 +4,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='public', static_folder='public')
 app.config.from_pyfile('eagle_cfg.py')
 app.config['SQLALCHEMY_DATABASE_URI'] =\
     'mysql://'+app.config['DB_USERNAME'] + ':' + \

@@ -5,7 +5,7 @@
 DB_USERNAME = 'root'
 DB_PASSWORD = 'root123'
 DB_HOST = '192.168.99.100'
-DB_PORT = '32770'
+DB_PORT = '3306'
 DB_NAME = 'eagle'
 
 ##mq configuration

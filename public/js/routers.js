@@ -5,17 +5,17 @@ app.config(['$routeProvider', function ($routeProvider) {
         .when("/",
         {
             controller: "showDashboard",
-            templateUrl: "dashboard.html"
+            templateUrl: "public/partials/dashboard.html"
         })
         .when("/signin",
         {
             controller: "signIn",
-            templateUrl: "signin.html"
+            templateUrl: "public/partials/signin.html"
         })
         .when("/signup",
         {
             controller: "signUp",
-            templateUrl: "signup.html"
+            templateUrl: "public/partials/signup.html"
         })
         .otherwise({ redirectTo: "/" });
     }
