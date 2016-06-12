@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.is_login %}
+  <p>Create your container:</p>
+    <form action="{{ url_for('create_instance') }}" method=post class=create-instance>
+        <select id="s1_text1_bold">
+            <option value="0" selected>please select:</option>
+            <option value="1">1.ubuntu</option>
+            <option value="2">2.centos</option>
+        </select>
+        <input type="text" name="container_name" value="dev-container"/>
+        <input type="hidden" name="user_name" value="{{ session.signin_user_name }}"/>
+        <input type="hidden" name="image_id" value="1"/>
+        <input type="submit" class="sub_btn" value="create">
+        <div>{{ popup }}</div>
+    </form>
+  <p>Instance dashboard:</p>
+    <table>
+      {% if instances %}
+      <tr>
+        <th>vm serial</th> 
+        <th>image_id</th>
+        <th>host</th>
+        <th>port</th>
+        <th>status</th>
+        <th>operate</th>
+      </tr>
+      
+      {% for instance in instances %}
+      <tr>
+        <td>{{instance.container_serial}}</td>
+        <td>{{instance.image_id}}</td> 
+        <td>{{instance.host}}</td>
+        <td>{{instance.port}}</td>
+        <td>{{instance.status}}</td>
+        <td>
+            <form action="{{ url_for('stop_instance') }}" method=post class=create-instance>
+                <input type="hidden" name="container_serial" value="{{ instance.container_serial }}">
+                <input type="hidden" name="user_name" value="{{ session.signin_user_name  }}">
+                <input type=submit value=stop>
+            </form>
+            <form action="{{ url_for('remove_instance') }}" method=post class=create-instance>
+                <input type="hidden" name="container_serial" value="{{ instance.container_serial }}">
+                <input type="hidden" name="user_name" value="{{ session.signin_user_name  }}">
+                <input type=submit value=remove>
+            </form>
+        </td>
+      </tr>
+      {% endfor %}
+      {%else%}
+      <p> you have no instance.
+     {% endif %}
+    </table>
+    <div>{{ message_box }}</div>
+    
+  {% endif %}
+{% endblock %}
