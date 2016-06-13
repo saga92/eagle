@@ -17,6 +17,11 @@ app.config(['$routeProvider', function ($routeProvider) {
             controller: "signUp",
             templateUrl: "public/partials/signup.html"
         })
+        .when("/signout",
+        {
+            controller: "signOut",
+            templateUrl: "public/partials/signin.html"
+        })
         .otherwise({ redirectTo: "/" });
     }
 ]);

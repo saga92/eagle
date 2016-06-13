@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from eagle import app, db
-from flask import request, render_template, url_for, session, flash, redirect
+from flask import request, render_template, url_for, session, flash, redirect, jsonify
 from model import User
 from model import Instance
 import hashlib
@@ -23,25 +23,35 @@ def show_dashboard():
     #return render_template('dashboard.html', instances=instances)
     return render_template('index.html')
 
+@app.route('/_session', methods=['GET'])
+def get_from_session():
+    key = request.args.get('key')
+    eagle_logger.debug(session.get(key))
+    return str(session.get(key))
+
 @app.route('/signin', methods=['GET', 'POST'])
 def sign_in():
-    error = None
+    res = {}
     if request.method == 'POST':
-        result = User.query.filter(or_(User.username == request.form['username']\
-            , User.email == request.form['username'])).first()
+        req_data = json.loads(request.data)
+        result = User.query.filter(or_(User.username == req_data['username']\
+            , User.email == req_data['username'])).first()
         if result is None:
-            error = 'Username not found.'
+            res['code'] = 'err'
+            res['message'] = 'Username not found.'
         else:
-            passcode = hashlib.md5(request.form['password'] + result.salt).hexdigest()
+            passcode = hashlib.md5(req_data['password'] + result.salt).hexdigest()
             if result.password == passcode:
                 session['is_login'] = True
                 session['signin_user_name'] = result.username
-                flash('You have logged in')
                 instances = Instance.query.all()
-                return redirect(url_for('show_dashboard'))
+                res['code'] = 'ok'
+                res['message'] = 'sign in successful'
             else:
-                error = 'wrong password.'
-    return render_template('signin.html', error=error)
+                res['code'] = 'err'
+                res['message'] = 'wrong password.'
+        return jsonify(**res)
+    return render_template('index.html')
 
 @app.route('/signout')
 def sign_out():
@@ -51,25 +61,29 @@ def sign_out():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def sign_up():
-    error = None
+    res = {}
     if request.method == 'POST':
         eagle_logger.debug(type(request.data))
-        req_body = json.loads(request.data)
-        result = User.query.filter(User.username == req_body['username']).first()
-        req_email =  req_body.get('email', None)
+        req_data = json.loads(request.data)
+        result = User.query.filter(User.username == req_data['username']).first()
+        req_email =  req_data.get('email', None)
         if req_email is not None:
             result_mail = User.query.filter(User.email == req_email).first()
         if result is not None:
-            error = 'Username have been occupied by others'
+            res['code'] = 'err'
+            res['message'] = 'Username have been occupied by others'
         elif req_email is not None and result_mail is not None:
-            error = 'Email has been occupied by others'
+            res['code'] = 'err'
+            res['message'] = 'Email has been occupied by others'
         else:
             timestamp = str(time.time()) + str(random.randint(10000, 20000))
             salt = hashlib.md5(timestamp).hexdigest()
-            passcode = hashlib.md5(req_body['password'] + salt).hexdigest()
-            u = User(req_body['username'], passcode, email=req_body.get('email', ''), \
+            passcode = hashlib.md5(req_data['password'] + salt).hexdigest()
+            u = User(req_data['username'], passcode, email=req_data.get('email', ''), \
                 salt=salt, create_time=datetime.datetime.now(), update_time=datetime.datetime.now())
             db.session.add(u)
             db.session.commit()
-            return "success"
+            res['code'] = 'ok'
+            res['message'] = 'sign up successful'
+        return jsonify(**res)
     return render_template('index.html')
