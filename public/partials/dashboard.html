@@ -1,41 +1,43 @@
-<ul ng-controller="navigateBar">
-  <li><a href="#/">index</a></li>
-  <li ng-show="!isLogin"><a href="#/signin">sign in</a></li>
-  <li><a href="#/signup">sign up</a></li>
-  <li ng-show="isLogin"><a href="#/signout">sign out</a></li>
-</ul>
+<div ng-controller="navigateBar">
+  <ul>
+    <li><a href="/#/">index</a></li>
+    <li ng-show="!isLogin"><a href="#/signin">sign in</a></li>
+    <li><a href="#/signup">sign up</a></li>
+    <li ng-show="isLogin"><a href="/signout">sign out</a></li>
+  </ul>
 
-<div ng-show="!isLogin" ng-controller="showDashboard">
-  <div>tips: {{ popup }}</div>
-  <p>Create your container:</p>
-  <form >
-      <select ng-model="selectedImage" ng-options="img.name for img in images">
-      </select>
-      <input type="text" name="containerName" ng-model="containerName"/>
-      <button ng-click="createIns()">create</button>
-      
-  </form>
-  <p>Instance dashboard:</p>
-  <table>
-    <tr>
-      <th>vm serial</th> 
-      <th>image_id</th>
-      <th>host</th>
-      <th>port</th>
-      <th>status</th>
-      <th>operate</th>
-    </tr>
+  <div ng-show="isLogin" ng-controller="showDashboard">
+    <div>tips: {{ popup }}</div>
+    <p>Create your container:</p>
+    <form >
+        <select ng-model="selectedImage" ng-options="img.name for img in images">
+        </select>
+        <input type="text" name="containerName" ng-model="containerName"/>
+        <button ng-click="createIns()">create</button>
+        
+    </form>
+    <p>Instance dashboard:</p>
+    <table>
+      <tr>
+        <th>vm serial</th> 
+        <th>image_id</th>
+        <th>host</th>
+        <th>port</th>
+        <th>status</th>
+        <th>operate</th>
+      </tr>
 
-    <tr ng-repeat="instance in instances">
-      <td>{{instance.container_serial}}</td>
-      <td>{{instance.image_id}}</td> 
-      <td>{{instance.host}}</td>
-      <td>{{instance.port}}</td>
-      <td>{{instance.status}}</td>
-      <td>
-        <button ng-click="stopIns(instance.container_serial)">stop</button>
-        <button ng-click="rmIns(instance.container_serial)">remove</button>
-      </td>
-    </tr>
-  </table>
+      <tr ng-repeat="instance in instances">
+        <td>{{instance.container_serial}}</td>
+        <td>{{instance.image_id}}</td> 
+        <td>{{instance.host}}</td>
+        <td>{{instance.port}}</td>
+        <td>{{instance.status}}</td>
+        <td>
+          <button ng-click="stopIns(instance.container_serial)">stop</button>
+          <button ng-click="rmIns(instance.container_serial)">remove</button>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>

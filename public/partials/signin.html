@@ -1,8 +1,8 @@
 <ul ng-controller="navigateBar">
-  <li><a href="#/">index</a></li>
+  <li><a href="/#/">index</a></li>
   <li ng-show="!isLogin"><a href="#/signin">sign in</a></li>
   <li><a href="#/signup">sign up</a></li>
-  <li ng-show="isLogin"><a href="#/signout">sign out</a></li>
+  <li ng-show="isLogin"><a href="/signout">sign out</a></li>
 </ul>
 
 <form ng-controller="signIn">

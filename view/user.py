@@ -15,18 +15,12 @@ from utils import eagle_logger
 
 @app.route('/', methods=['GET', 'POST'])
 def show_dashboard():
-    #instances = None
-    #eagle_logger.info(session.get('signin_user_name'))
-    #user_query_result = User.query.filter(User.username == session.get('signin_user_name', '')).first()
-    #if user_query_result is not None:
-    #    instances = Instance.query.filter(Instance.user_id == user_query_result.id).all()
-    #return render_template('dashboard.html', instances=instances)
     return render_template('index.html')
 
 @app.route('/_session', methods=['GET'])
 def get_from_session():
     key = request.args.get('key')
-    eagle_logger.debug(session.get(key))
+    eagle_logger.debug('session: %s ' % session.get(key))
     return str(session.get(key))
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -56,8 +50,7 @@ def sign_in():
 @app.route('/signout')
 def sign_out():
     session.pop('is_login', None)
-    flash('You were logged out')
-    return redirect(url_for('show_dashboard'))
+    return render_template('index.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def sign_up():

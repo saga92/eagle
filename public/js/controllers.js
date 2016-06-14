@@ -101,12 +101,6 @@ angular.module("app.controllers", [ ])
             };
         }
     ])
-    .controller("signOut", ['$scope', '$http', function ($scope, $http) {
-            $http.get('/signout').success(function(data){
-
-            });
-        }
-    ])
     .controller("navigateBar", ['$scope', 'Session', function($scope, Session){
         Session.get('is_login', function(res){
             console.log(res);
