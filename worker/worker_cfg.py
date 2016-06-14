@@ -3,9 +3,9 @@
 
 DOCKER_CLI_URL = 'unix://var/run/docker.sock'
 
-MAC = True
+MAC = False
 
-IMAGE_DICT = {'1': 'eagle-ubuntu:latest'}
+IMAGE_DICT = {1: 'eagle-ubuntu:latest'}
 
 UI_HOST = 'http://127.0.0.1:8088'
 

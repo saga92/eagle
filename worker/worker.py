@@ -31,6 +31,7 @@ def connect_docker_cli():
 def create_run_container(cli, *args, **kwargs):
     image_id = kwargs.get('image_id')
     image_name = worker_cfg.IMAGE_DICT.get(image_id)
+    eagle_logger.debug(image_name)
     container = cli.create_container(image=image_name, detach=True, name=kwargs.get('container_name'))
     response = cli.start(container=container.get('Id'))
     if response is None:
