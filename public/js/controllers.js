@@ -17,6 +17,7 @@ angular.module("app.controllers", [ ])
                     }
                 }).success(function(data){
                     $scope.instances = data.instances;
+                    console.log($scope.instances)
                 });
             });
             
@@ -31,6 +32,7 @@ angular.module("app.controllers", [ ])
                     });
 
                     $http.post(url, parameter).success(function(data){
+                        $scope.instances.push(data.instance);
                         $scope.popup = data.message;
                     }).error(function(data){
                         $scope.popup = data.message;
@@ -48,6 +50,13 @@ angular.module("app.controllers", [ ])
                     });
 
                     $http.post(url, parameter).success(function(data){
+                        console.log(data)
+                        for(var i=0; i<$scope.instances.length; ++i){
+                            if($scope.instances[i].container_serial == data.container_serial){
+                                $scope.instances[i].status = 2;
+                                break;
+                            }
+                        }
                         $scope.popup = data.message;
                     }).error(function(data){
                         $scope.popup = data.message;
@@ -65,6 +74,12 @@ angular.module("app.controllers", [ ])
                     });
 
                     $http.post(url, parameter).success(function(data){
+                         for(var i=0; i<$scope.instances.length; ++i){
+                            if($scope.instances[i].container_serial == data.container_serial){
+                                $scope.instances.splice(i, i);
+                                break;
+                            }
+                        }
                         $scope.popup = data.message;
                     }).error(function(data){
                         $scope.popup = data.message;

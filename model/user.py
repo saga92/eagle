@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask_sqlalchemy import SQLAlchemy
-from eagle import app, db
+from . import Base
+from sqlalchemy import Column, Integer, String, DateTime
 
-class User(db.Model):
+class User(Base):
     __tablename__ = 'user'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(128), nullable=False)
-    password = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(128), nullable=False)
-    salt = db.Column(db.String(128), nullable=False)
-    create_time = db.Column(db.DateTime, nullable=False)
-    update_time = db.Column(db.DateTime, nullable=False)
-    is_deleted = db.Column(db.Integer, nullable=False)
+    id = Column(Integer, primary_key=True)
+    username = Column(String(128), nullable=False)
+    password = Column(String(128), nullable=False)
+    email = Column(String(128), nullable=False)
+    salt = Column(String(128), nullable=False)
+    create_time = Column(DateTime, nullable=False)
+    update_time = Column(DateTime, nullable=False)
+    is_deleted = Column(Integer, nullable=False)
 
     def __init__(self, username, password, *args, **kargs):
         self.username = username

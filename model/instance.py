@@ -1,32 +1,33 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask_sqlalchemy import SQLAlchemy
-from eagle import db
+from . import Base
 
-class Image(db.Model):
+from sqlalchemy import Column, Integer, String, DateTime
+
+class Image(Base):
     __tablename__ = 'image'
-    id = db.Column(db.Integer, primary_key=True)
-    hashcode = db.Column(db.String(128), nullable=False)
-    description = db.Column(db.String(512), nullable=False)
-    create_time = db.Column(db.DateTime, nullable=False)
-    update_time = db.Column(db.DateTime, nullable=False)
-    is_deleted = db.Column(db.Integer, nullable=False)
+    id = Column(Integer, primary_key=True)
+    hashcode = Column(String(128), nullable=False)
+    description = Column(String(512), nullable=False)
+    create_time = Column(DateTime, nullable=False)
+    update_time = Column(DateTime, nullable=False)
+    is_deleted = Column(Integer, nullable=False)
 
 
-class Instance(db.Model):
+class Instance(Base):
     __tablename__ = 'instance'
-    id = db.Column(db.Integer, primary_key=True)
-    image_id = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, nullable=False)
-    container_name = db.Column(db.String(128), nullable=False)
-    container_serial = db.Column(db.String(128), nullable=False)
-    host = db.Column(db.String(128), nullable=False)
-    port = db.Column(db.Integer, nullable=False)
-    status = db.Column(db.Integer, nullable=False)
-    create_time = db.Column(db.DateTime, nullable=False)
-    update_time = db.Column(db.DateTime, nullable=False)
-    is_deleted = db.Column(db.Integer, nullable=False)
+    id = Column(Integer, primary_key=True)
+    image_id = Column(Integer, nullable=False)
+    user_id = Column(Integer, nullable=False)
+    container_name = Column(String(128), nullable=False)
+    container_serial = Column(String(128), nullable=False)
+    host = Column(String(128), nullable=False)
+    port = Column(Integer, nullable=False)
+    status = Column(Integer, nullable=False)
+    create_time = Column(DateTime, nullable=False)
+    update_time = Column(DateTime, nullable=False)
+    is_deleted = Column(Integer, nullable=False)
 
     def __init__(self, image_id, user_id, container_name, container_serial, host, port, status, **kargs):
         self.image_id = image_id

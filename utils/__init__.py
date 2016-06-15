@@ -10,4 +10,4 @@ if eagle_home is None:
     exit(1)
 
 from log import eagle_logger
-from mq import MessageQueue
+from mq import UiQueue, WorkerQueue
