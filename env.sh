@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-export EAGLE_HOME=$PWD
-export PYTHONPATH=$PWD
+export EAGLE_HOME=$(pwd)
+export PYTHONPATH=$(pwd)
