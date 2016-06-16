@@ -51,7 +51,7 @@ class WorkerQueue(MessageQueue):
 
     def __init__(self):
         super(WorkerQueue, self).__init__()
-        self.channel.queue_declare(queue='eagle')
+        self.channel.queue_declare(queue='eagle', durable=True)
 
     def run(self, message):
         """

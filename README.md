@@ -5,6 +5,6 @@
 ### Prepare
 
 + set your eagle home env
-```
-export EAGLE_HOME=/path/to/eagle
+```bash
+source env.sh
 ```

@@ -88,6 +88,30 @@ def stop_instance():
             res['message'] = 'container not exist'
     return jsonify(**res)
 
+@app.route('/restart_ins', methods=['GET', 'POST'])
+def restart_instance():
+    res = {}
+    if request.method == 'POST':
+        req_data = json.loads(request.data)
+        instance_query_result = db.session.query(Instance).filter(\
+            Instance.container_serial == req_data['container_serial']).first()
+        if instance_query_result is not None:
+            policy = {}
+            policy['operate'] = app.config['RESTART_INSTANCE']
+            policy['container_serial'] = req_data['container_serial']
+            policy['container_name'] = instance_query_result.container_name
+            policy['user_name'] = req_data['user_name']
+            message = json.dumps(policy)
+            ui_mq = UiQueue()
+            worker_res = ui_mq.send(message)
+            worker_res_dict = json.loads(worker_res)
+            res = worker_res_dict
+            eagle_logger.info(res['message'])
+        else:
+            res['code'] = 'err'
+            res['message'] = 'container not exist'
+    return jsonify(**res)
+
 @app.route('/remove_ins', methods=['GET', 'POST'])
 def remove_instance():
     res = {}

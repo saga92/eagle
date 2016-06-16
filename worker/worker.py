@@ -22,6 +22,8 @@ class Worker(WorkerQueue):
             res = create_run_container(cli, **policy)
         elif policy['operate'] == worker_cfg.STOP_INSTANCE:
             res = stop_container(cli, **policy)
+        elif policy['operate'] == worker_cfg.RESTART_INSTANCE:
+            res = restart_container(cli, **policy)
         elif policy['operate'] == worker_cfg.REMOVE_INSTANCE:
             res = remove_container(cli, **policy)
         return res
@@ -39,7 +41,6 @@ def create_run_container(cli, *args, **kwargs):
     res = {'code': 'error', 'message': 'problem error'}
     image_id = kwargs.get('image_id')
     image_name = worker_cfg.IMAGE_DICT.get(image_id)
-    eagle_logger.debug(image_name)
     container = cli.create_container(image=image_name, detach=True, name=kwargs.get('container_name'))
     response = cli.start(container=container.get('Id'))
     if response is None:
@@ -86,6 +87,22 @@ def stop_container(cli, *args, **kwargs):
         instance_query_res.status = 2
         db.session.commit()
         print("succeed to stop %s." % kwargs.get('container_name'))
+    return json.dumps(res)
+
+def restart_container(cli, *args, **kwargs):
+    res = {'code': 'error', 'message': 'problem error'}
+    response = cli.start(container=kwargs.get('container_serial'))
+    if response is None:
+        res['code'] = 'ok'
+        res['message'] = 'restart successful'
+        res['container_serial'] = kwargs.get('container_serial')
+
+        #write db
+        instance_query_res = db.session.query(Instance).filter(\
+            Instance.container_serial == kwargs.get('container_serial')).first()
+        instance_query_res.status = 1
+        db.session.commit()
+        print("succeed to restart %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
 def remove_container(cli, *args, **kwargs):
