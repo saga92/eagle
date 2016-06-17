@@ -3,30 +3,25 @@
 
 import json
 from utils import WorkerQueue
-from utils import eagle_logger
+from utils import worker_logger
 from utils import db
 from model import Instance, User
 import requests
 import worker_cfg
 
-class Worker(WorkerQueue):
-
-    def __init__(self):
-        super(Worker, self).__init__()
-
-    def run(cls, message):
-        res = None
-        policy = json.loads(message)
-        cli = connect_docker_cli()
-        if policy['operate'] == worker_cfg.CREATE_INSTANCE:
-            res = create_run_container(cli, **policy)
-        elif policy['operate'] == worker_cfg.STOP_INSTANCE:
-            res = stop_container(cli, **policy)
-        elif policy['operate'] == worker_cfg.RESTART_INSTANCE:
-            res = restart_container(cli, **policy)
-        elif policy['operate'] == worker_cfg.REMOVE_INSTANCE:
-            res = remove_container(cli, **policy)
-        return res
+def worker_handler(message):
+    res = None
+    policy = json.loads(message)
+    cli = connect_docker_cli()
+    if policy['operate'] == worker_cfg.CREATE_INSTANCE:
+        res = create_run_container(cli, **policy)
+    elif policy['operate'] == worker_cfg.STOP_INSTANCE:
+        res = stop_container(cli, **policy)
+    elif policy['operate'] == worker_cfg.RESTART_INSTANCE:
+        res = restart_container(cli, **policy)
+    elif policy['operate'] == worker_cfg.REMOVE_INSTANCE:
+        res = remove_container(cli, **policy)
+    return res
 
 def connect_docker_cli():
     if worker_cfg.MAC:
@@ -69,7 +64,7 @@ def create_run_container(cli, *args, **kwargs):
                 host, port, 1)
         db.session.add(ins)
         db.session.commit()
-        print("succeed to create %s." % kwargs.get('container_name'))
+        worker_logger.info("succeed to create %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
 def stop_container(cli, *args, **kwargs):
@@ -86,7 +81,7 @@ def stop_container(cli, *args, **kwargs):
                 Instance.container_serial == kwargs.get('container_serial')).first()
         instance_query_res.status = 2
         db.session.commit()
-        print("succeed to stop %s." % kwargs.get('container_name'))
+        worker_logger.info("succeed to stop %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
 def restart_container(cli, *args, **kwargs):
@@ -102,7 +97,7 @@ def restart_container(cli, *args, **kwargs):
             Instance.container_serial == kwargs.get('container_serial')).first()
         instance_query_res.status = 1
         db.session.commit()
-        print("succeed to restart %s." % kwargs.get('container_name'))
+        worker_logger.info("succeed to restart %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
 def remove_container(cli, *args, **kwargs):
@@ -119,9 +114,10 @@ def remove_container(cli, *args, **kwargs):
                 Instance.container_serial == kwargs.get('container_serial')).first()
         db.session.delete(instance_query_res)
         db.session.commit()
-        print("succeed to remove %s." % kwargs.get('container_name'))
+        worker_logger.info("succeed to remove %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
 if __name__ == '__main__':
-    worker = Worker()
+    worker = WorkerQueue()
+    worker.set_handler(worker_handler)
     worker.start_consuming()

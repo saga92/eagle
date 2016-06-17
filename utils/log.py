@@ -3,28 +3,48 @@
 
 import logging
 from logging.handlers import TimedRotatingFileHandler
+from logging import StreamHandler
 from logging import Formatter
 import imp
 import os
+import sys
 import time
 
-app_conf = imp.load_source('app_conf', os.getenv('EAGLE_HOME', '..') + '/eagle_cfg.py')
+eagle_logger = None
+ui_logger = None
+worker_logger = None
 
-eagle_logger = logging.getLogger('eagle')
+def get_logger(logger_name):
+    app_conf = imp.load_source('app_conf', os.getenv('EAGLE_HOME', '..') + '/eagle_cfg.py')
 
-formatter = Formatter(
-    '%(asctime)s %(levelname)s: %(message)s '
-    '[in %(pathname)s:%(lineno)d]'
-)
-handler = TimedRotatingFileHandler(app_conf.LOG_PATH + '/eagle.log', when="midnight")
-handler.suffix = "%Y-%m-%d"
-handler.setFormatter(formatter)
+    _logger = logging.getLogger(logger_name)
 
-eagle_logger.addHandler(handler)
-eagle_logger.setLevel(logging.DEBUG)
+    file_formatter = Formatter(
+        '%(levelname)s | %(asctime)s | %(name)s | %(message)s | %(pathname)s:%(lineno)d'
+    )
+    time_rotating_handler = TimedRotatingFileHandler(\
+            '{0}/{1}.log'.format(app_conf.LOG_PATH, logger_name), when="midnight", encoding='utf-8')
+    time_rotating_handler.suffix = "%Y-%m-%d"
+    time_rotating_handler.setFormatter(file_formatter)
+
+    stream_handler = StreamHandler(stream=sys.stdout)
+    echo_formatter = Formatter('[%(levelname)s][%(name)s][in %(filename)s:%(lineno)d] %(message)s')
+    stream_handler.setFormatter(echo_formatter)
+
+    _logger.addHandler(time_rotating_handler)
+    _logger.addHandler(stream_handler)
+    _logger.setLevel(logging.DEBUG)
+
+    return _logger
+
+if eagle_logger is None:
+    eagle_logger = get_logger('eagle')
+
+if ui_logger is None:
+    ui_logger = get_logger('ui')
+
+if worker_logger is None:
+    worker_logger = get_logger('worker')
 
 if __name__ == '__main__':
-    var=1;
-    while (var==1):
-        time.sleep(5)
-        eagle_logger.debug('this is a log for test reason')
+    eagle_logger.debug('this is a log for test reason')
