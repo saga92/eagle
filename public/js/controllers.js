@@ -16,6 +16,9 @@ angular.module("app.controllers", [ ])
                         signin_username: signInUsername
                     }
                 }).success(function(data){
+                    for(var i=0; i<data.instances.length; ++i){
+                        data.instances[i].container_serial = data.instances[i].container_serial.substring(0,10);
+                    }
                     $scope.instances = data.instances;
                     console.log($scope.instances)
                 });
