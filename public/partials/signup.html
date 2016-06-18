@@ -5,17 +5,20 @@
   <li ng-show="isLogin"><a href="/signout">sign out</a></li>
 </ul>
 
-<form ng-controller="signUp" name="signupform" novalidate>
-  <dt/>Username:
-	<dd/><input type="text" name="username" ng-model="username" required/>
-	<span style="color:red" ng-show="signupform.username.$dirty && signupform.username.$invalid"></span>
-	<span style="color:red" ng-show="signupform.username.$error.required">username required</span>
-	<dt/>Password:
-	<dd/><input type="password" name="password" ng-model="password" required/>
-	<span style="color:red" ng-show="signupform.password.$error.required">password required</span>
-	<dt/>Email:
-	<dd/><input type="email" name="email" ng-model="email" required/>
-	<span style="color:red" ng-show="signupform.email.$error.email">invalid email</span>
-	<dt/><button ng-click="submit()">submit</button>
-	<span>{{popup}}</span>
-</form>
+<div class="container" ng-controller="signUp">
+
+  <form class="form-signin" ng-controller="signUp">
+    <h2 class="form-signin-heading">Please sign up</h2>
+    <label for="inputEmail" class="sr-only">Username</label>
+    <input type="text" id="inputEmail" class="form-control" placeholder="Username" ng-model="username" required autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Password" ng-model="password" required>
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" ng-model="email" required>
+    
+    <button class="btn btn-lg btn-primary btn-block" ng-click="submit()">Sign up</button>
+    <span>{{popup}}</span>
+  </form>
+<!-- Custom styles for this template -->
+<link href="public/css/signin.css" rel="stylesheet">
+</div> <!-- /container -->
