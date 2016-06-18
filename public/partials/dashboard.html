@@ -7,37 +7,41 @@
   </ul>
 
   <div ng-show="isLogin" ng-controller="showDashboard">
-    <div>tips: {{ popup }}</div>
-    <p>Create your container:</p>
-    <form >
-        <select ng-model="selectedImage" ng-options="img.name for img in images">
-        </select>
-        <input type="text" name="containerName" ng-model="containerName"/>
-        <button ng-click="createIns()">create</button>
-        
-    </form>
-    <p>Instance dashboard:</p>
-    <table>
-      <tr>
-        <th>vm serial</th> 
-        <th>image_id</th>
-        <th>host</th>
-        <th>port</th>
-        <th>status</th>
-        <th>operate</th>
-      </tr>
+      <div>tips: {{ popup }}</div>
+      <p>Create your container:</p>
+      <form >
+          <select ng-model="selectedImage" ng-options="img.name for img in images">
+          </select>
+          <input type="text" name="containerName" ng-model="containerName"/>
+          <button ng-click="createIns()">create</button>
+          
+      </form>
+      <p>Instance dashboard:</p>
+      <table class="table table-striped">
+        <tr>
+          <th>#</th>
+          <th>vm serial</th> 
+          <th>vm name</th>
+          <th>image_id</th>
+          <th>host</th>
+          <th>port</th>
+          <th>status</th>
+          <th>operate</th>
+        </tr>
 
-      <tr ng-repeat="instance in instances">
-        <td>{{instance.container_serial}}</td>
-        <td>{{instance.image_id}}</td> 
-        <td>{{instance.host}}</td>
-        <td>{{instance.port}}</td>
-        <td>{{instance.status}}</td>
-        <td>
-          <button ng-click="stopIns(instance.container_serial)">stop</button>
-          <button ng-click="rmIns(instance.container_serial)">remove</button>
-        </td>
-      </tr>
-    </table>
-  </div>
+        <tr ng-repeat="instance in instances">
+          <td>#</td>
+          <td>{{instance.container_serial}}</td>
+          <td>{{instance.container_name}}</td>
+          <td>{{instance.image_id}}</td> 
+          <td>{{instance.host}}</td>
+          <td>{{instance.port}}</td>
+          <td>{{instance.status}}</td>
+          <td>
+            <button ng-click="stopIns(instance.container_serial)">stop</button>
+            <button ng-click="rmIns(instance.container_serial)">remove</button>
+          </td>
+        </tr>
+      </table>
+    </div>
 </div>
