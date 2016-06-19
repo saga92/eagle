@@ -3,7 +3,14 @@
 
 angular.module("app.controllers", [ ])
     
-    .controller("showDashboard", ['$scope', 'Session', '$http', function ($scope, Session, $http) {
+    .controller("showDashboard", ['$scope', 'Session', '$http', '$window',
+        function ($scope, Session, $http, $window) {
+            Session.get('is_login', function(res){
+                console.log(res);
+                if(res != 'True'){
+                    $window.location.href = '#/signin';
+                }
+            })
             $scope.images=[
                 {id:1, name:"ubuntu 14.04"},
                 {id:2, name:"centos 7"}
@@ -35,6 +42,7 @@ angular.module("app.controllers", [ ])
                     });
 
                     $http.post(url, parameter).success(function(data){
+                        data.instance.container_serial = data.instance.container_serial.substring(0,10);
                         $scope.instances.push(data.instance);
                         $scope.popup = data.message;
                     }).error(function(data){
@@ -92,7 +100,7 @@ angular.module("app.controllers", [ ])
 
         }
     ])
-    .controller("signIn", ['$scope', '$http', function ($scope, $http) {
+    .controller("signIn", ['$scope', '$http', '$window', function ($scope, $http, $window) {
             $scope.submit=function(){
                 var url = "/signin"
                 var parameter = JSON.stringify({
@@ -100,32 +108,37 @@ angular.module("app.controllers", [ ])
                     password: $scope.password
                 });
             	$http.post(url, parameter).success(function(data){
-                    $scope.popup = data.message;
+                    if(data.code == 'ok'){
+                        $window.location.href = '#/';
+                    }else{
+                        $scope.popup = data.message;
+                    }
                 }).error(function(data){
                     $scope.popup = data.message;
                 });
             };
         }
     ])
-    .controller("signUp", ['$scope', '$http', function ($scope, $http) {
+    .controller("signUp", ['$scope', '$http', '$window', function ($scope, $http, $window) {
             $scope.submit=function(){
                 var url = "/signup"
                 var parameter = JSON.stringify({username:$scope.username, password:$scope.password, email:$scope.email});
                 $http.post(url, parameter).success(function(data){
-                    $scope.popup=data.message;
+                    if(data.code == 'ok'){
+                        $window.location.href = '#/';
+                    }else{
+                        $scope.popup=data.message;
+                    }
                 }).error(function(data){
                     $scope.popup=data.message;
                 })
             };
         }
     ])
-    .controller("navigateBar", ['$scope', 'Session', function($scope, Session){
-        Session.get('is_login', function(res){
-            console.log(res);
-            if(res == 'True'){
-                $scope.isLogin = true;
-            }else if(res == 'None'){
-                $scope.isLogin = false;
-            }
-        })
-    }]);
+    .controller("getUsername", ['$scope', 'Session', '$http', '$window',
+        function ($scope, Session, $http, $window) {
+            Session.get("signin_user_name", function(res){
+                $scope.signInUsername = res;
+            });
+        }
+    ]);
