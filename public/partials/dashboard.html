@@ -159,7 +159,7 @@
                                       <td>{{instance.port}}</td>
                                       <td>{{instance.status}}</td>
                                       <td>
-                                        <button ng-click="stopIns(instance.container_serial)">stop</button>
+                                        <button ng-click="stopIns(instance.container_serial)">{{instance.statusStr}}</button>
                                         <button ng-click="rmIns(instance.container_serial)">remove</button>
                                       </td>
                                     </tr>

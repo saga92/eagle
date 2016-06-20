@@ -26,7 +26,16 @@ angular.module("app.controllers", [ ])
                     for(var i=0; i<data.instances.length; ++i){
                         data.instances[i].container_serial = data.instances[i].container_serial.substring(0,10);
                     }
+                    data.statusStr = "stop";
+                    console.log(data.statusStr);
                     $scope.instances = data.instances;
+                    for(var i=0; i<$scope.instances.length; ++i){
+                            if($scope.instances[i].status==2){
+                                $scope.instances[i].statusStr = "restart";
+                            }else if($scope.instances[i].status==1){
+                                $scope.instances[i].statusStr = "stop";
+                            }
+                    }
                     console.log($scope.instances)
                 });
             });
@@ -55,20 +64,29 @@ angular.module("app.controllers", [ ])
                 Session.get("signin_user_name", function(res){
                     var signInUsername = res;
                     var url = "/stop_ins";
-                    var parameter = JSON.stringify({
+                    var parameter = {
                         container_serial: containerSerial,
                         user_name: signInUsername
-                    });
+                    };
+                    alert(parameter.container_serial);
 
-                    $http.post(url, parameter).success(function(data){
-                        console.log(data)
+
+                   $http.post(url, parameter).success(function(data){
+
                         for(var i=0; i<$scope.instances.length; ++i){
                             if($scope.instances[i].container_serial == data.container_serial){
-                                $scope.instances[i].status = 2;
-                                break;
+                                if($scope.instances[i].status == 2){
+                                    $scope.instances[i].status = 1;
+                                    $scope.instances[i].statusStr ="stop";
+                                    break;
+                                }else if($scope.instances[i].status == 1){
+                                    $scope.instances[i].status = 2;
+                                    $scope.instances[i].statusStr ="restart";
+                                    break;
+                                }
                             }
                         }
-                        $scope.popup = data.message;
+                       $scope.popup = data.message;
                     }).error(function(data){
                         $scope.popup = data.message;
                     });
