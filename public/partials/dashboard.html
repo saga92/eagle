@@ -152,7 +152,7 @@
 
                                     <tr ng-repeat="instance in instances">
                                       <td>#</td>
-                                      <td>{{instance.container_serial}}</td>
+                                      <td>{{instance.container_serial | limitTo : 10}}</td>
                                       <td>{{instance.container_name}}</td>
                                       <td>{{instance.image_id}}</td> 
                                       <td>{{instance.host}}</td>
