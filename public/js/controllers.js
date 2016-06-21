@@ -39,7 +39,9 @@ angular.module("app.controllers", [ ])
                     });
 
                     $http.post(url, parameter).success(function(data){
-                        $scope.instances.push(data.instance);
+                        if(data.code == 'ok'){
+                            $scope.instances.push(data.instance);
+                        }
                         $scope.popup = data.message;
                     }).error(function(data){
                         $scope.popup = data.message;
