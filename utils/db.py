@@ -16,8 +16,6 @@ SQLALCHEMY_DATABASE_URI =\
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 Session = sessionmaker(bind=engine)
 
-session = Session()
-
 if __name__ == '__main__':
     user1 = session.query(User).first()
     print user1.password

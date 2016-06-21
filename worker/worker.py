@@ -56,14 +56,15 @@ def create_run_container(cli, *args, **kwargs):
         res['ins']['status'] = 1
 
         #write db
-        user_query_res = db.session.query(User).filter(\
+        db_session = db.Session()
+        user_query_res = db_session.query(User).filter(\
                 User.username == kwargs.get('user_name')).first()
         user_id = user_query_res.id
         ins = Instance(kwargs.get('image_id'), \
                 user_id, kwargs.get('container_name'), container_serial,
                 host, port, 1)
-        db.session.add(ins)
-        db.session.commit()
+        db_session.add(ins)
+        db_session.commit()
         worker_logger.info("succeed to create %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
@@ -77,10 +78,11 @@ def stop_container(cli, *args, **kwargs):
         res['container_serial'] = kwargs.get('container_serial')
 
         #write db
-        instance_query_res = db.session.query(Instance).filter(\
+        db_session = db.Session()
+        instance_query_res = db_session.query(Instance).filter(\
                 Instance.container_serial == kwargs.get('container_serial')).first()
         instance_query_res.status = 2
-        db.session.commit()
+        db_session.commit()
         worker_logger.info("succeed to stop %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
@@ -93,10 +95,11 @@ def restart_container(cli, *args, **kwargs):
         res['container_serial'] = kwargs.get('container_serial')
 
         #write db
-        instance_query_res = db.session.query(Instance).filter(\
+        db_session = db.Session()
+        instance_query_res = db_session.query(Instance).filter(\
             Instance.container_serial == kwargs.get('container_serial')).first()
         instance_query_res.status = 1
-        db.session.commit()
+        db_session.commit()
         worker_logger.info("succeed to restart %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
@@ -110,10 +113,11 @@ def remove_container(cli, *args, **kwargs):
         res['container_serial'] = kwargs.get("container_serial")
 
         #write db
-        instance_query_res = db.session.query(Instance).filter(\
+        db_session = db.Session()
+        instance_query_res = db_session.query(Instance).filter(\
                 Instance.container_serial == kwargs.get('container_serial')).first()
-        db.session.delete(instance_query_res)
-        db.session.commit()
+        db_session.delete(instance_query_res)
+        db_session.commit()
         worker_logger.info("succeed to remove %s." % kwargs.get('container_name'))
     return json.dumps(res)
 

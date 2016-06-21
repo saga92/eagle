@@ -29,7 +29,8 @@ def sign_in():
     res = {}
     if request.method == 'POST':
         req_data = json.loads(request.data)
-        result = db.session.query(User).filter(or_(User.username == req_data['username']\
+        db_session = db.Session()
+        result = db_session.query(User).filter(or_(User.username == req_data['username']\
             , User.email == req_data['username'])).first()
         if result is None:
             res['code'] = 'err'
@@ -39,7 +40,7 @@ def sign_in():
             if result.password == passcode:
                 session['is_login'] = True
                 session['signin_user_name'] = result.username
-                instances = db.session.query(Instance).all()
+                instances = db_session.query(Instance).all()
                 res['code'] = 'ok'
                 res['message'] = 'sign in successful'
             else:
@@ -60,10 +61,11 @@ def sign_up():
     if request.method == 'POST':
         eagle_logger.debug(type(request.data))
         req_data = json.loads(request.data)
-        result = db.session.query(User).filter(User.username == req_data['username']).first()
+        db_session = db.Session()
+        result = db_session.query(User).filter(User.username == req_data['username']).first()
         req_email =  req_data.get('email', None)
         if req_email is not None:
-            result_mail = db.session.query(User).filter(User.email == req_email).first()
+            result_mail = db_session.query(User).filter(User.email == req_email).first()
         if result is not None:
             res['code'] = 'err'
             res['message'] = 'Username have been occupied by others'
@@ -76,8 +78,8 @@ def sign_up():
             passcode = hashlib.md5(req_data['password'] + salt).hexdigest()
             u = User(req_data['username'], passcode, email=req_data.get('email', ''), \
                 salt=salt, create_time=datetime.datetime.now(), update_time=datetime.datetime.now())
-            db.session.add(u)
-            db.session.commit()
+            db_session.add(u)
+            db_session.commit()
             res['code'] = 'ok'
             res['message'] = 'sign up successful'
         return jsonify(**res)
