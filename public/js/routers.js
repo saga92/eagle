@@ -5,17 +5,23 @@ app.config(['$routeProvider', function ($routeProvider) {
         .when("/",
         {
             controller: "showDashboard",
-            templateUrl: "public/partials/dashboard.html"
+            templateUrl: function(){
+                return "public/partials/dashboard.html?" + new Date()
+            }
         })
         .when("/signin",
         {
             controller: "signIn",
-            templateUrl: "public/partials/signin.html"
+            templateUrl: function(){
+                return "public/partials/signin.html?" + new Date()
+            }
         })
         .when("/signup",
         {
             controller: "signUp",
-            templateUrl: "public/partials/signup.html"
+            templateUrl: function(){
+                return "public/partials/signup.html?" + new Date()
+            }
         })
         .otherwise({ redirectTo: "/" });
     }
