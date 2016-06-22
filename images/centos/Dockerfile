@@ -1,4 +1,4 @@
-FROM centos:centos7
+FROM centos:7
 
 RUN yum -y install openssh-server epel-release && \
     yum -y install pwgen && \

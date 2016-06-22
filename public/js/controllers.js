@@ -14,8 +14,8 @@ angular.module("app.controllers", [ ])
             $scope.images=[
                 {id:1, name:"ubuntu 14.04"},
                 {id:2, name:"centos 7"},
-                {id:3, name:"fedora latest"},
-                {id:4, name:"debian latest"}
+                {id:3, name:"fedora 23"},
+                {id:4, name:"debian 8"}
             ];
             $scope.containerName = "dev-container";
             Session.get("signin_user_name", function(res){
