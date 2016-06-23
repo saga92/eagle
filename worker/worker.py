@@ -44,9 +44,8 @@ def create_run_container(cli, *args, **kwargs):
         return json.dumps(res)
     else:
         container_serial = container.get('Id')
-        inspect_res = cli.inspect_container(container.get('Id'))
+        inspect_res = cli.inspect_container(container.get('Id')) #inspect_res is validate after container start
         host = inspect_res["NetworkSettings"]["IPAddress"]
-        worker_logger.info("hosts %s." % host)
         port = 22
 
         #write db
@@ -55,13 +54,23 @@ def create_run_container(cli, *args, **kwargs):
         user_id = user_query_res.id
         ins = Instance(kwargs.get('image_id'), \
                        user_id, kwargs.get('container_name'), container_serial,
-                       host, port, 1)
+                       host, port, 6)
         db_session.add(ins)
         db_session.commit()
         worker_logger.info("succeed to write %s in database." % kwargs.get('container_name'))
 
         response = cli.start(container=container.get('Id'))
         if response is None:
+            #update db
+            db_session = db.Session()
+            instance_query_res = db_session.query(Instance).filter(Instance.container_serial == container_serial).first()
+            inspect_res = cli.inspect_container(container.get('Id'))
+            worker_logger.info("inspect_res %s." % inspect_res)
+            host = inspect_res["NetworkSettings"]["IPAddress"]
+            instance_query_res.host = host
+            instance_query_res.status = 1
+            db_session.commit()
+
             #supposed to be successful
             res['code'] = 'ok'
             res['message'] = 'create successful'
@@ -72,7 +81,7 @@ def create_run_container(cli, *args, **kwargs):
             res['ins']['host'] = host
             res['ins']['port'] = port
             res['ins']['user_name'] = kwargs.get('user_name')
-            res['ins']['status'] = 1
+            res['ins']['status'] = 1           
 
             worker_logger.info("succeed to create %s." % kwargs.get('container_name'))
         return json.dumps(res)
