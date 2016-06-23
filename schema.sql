@@ -36,7 +36,7 @@ create table `instance` (
     `container_serial` varchar(128) not null default '' comment 'container serial',
     `host` varchar(128) not null default '' comment 'container host ip',
     `port` int(11) not null default '0' comment 'container host port',
-    `status` tinyint(3) not null default '0' comment '1:running 2:stop 3:unknown',
+    `status` tinyint(3) not null default '0' comment '1:running 2:stop 3:unknown 4:restart 5:failed 6:pending',
     `create_time` datetime not null default '0000-00-00 00:00' comment 'create_time',
     `update_time` datetime not null default '0000-00-00 00:00' comment 'update_time',
     `is_deleted` tinyint(3) not null default '0' comment '1:deleted',
