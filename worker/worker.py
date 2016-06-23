@@ -65,7 +65,6 @@ def create_run_container(cli, *args, **kwargs):
             db_session = db.Session()
             instance_query_res = db_session.query(Instance).filter(Instance.container_serial == container_serial).first()
             inspect_res = cli.inspect_container(container.get('Id'))
-            worker_logger.info("inspect_res %s." % inspect_res)
             host = inspect_res["NetworkSettings"]["IPAddress"]
             instance_query_res.host = host
             instance_query_res.status = 1
