@@ -2,7 +2,7 @@
 
 
 angular.module("app.controllers", [ ])
-    
+
     .controller("showDashboard", ['$scope', 'Session', '$http', '$window',
         function ($scope, Session, $http, $window) {
             Session.get('is_login', function(res){
@@ -29,7 +29,7 @@ angular.module("app.controllers", [ ])
                     console.log($scope.instances)
                 });
             });
-            
+
             $scope.createIns=function(){
                 Session.get("signin_user_name", function(res){
                     var signInUsername = res;
