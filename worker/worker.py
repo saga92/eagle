@@ -5,7 +5,7 @@ import json
 from utils import WorkerQueue
 from utils import worker_logger
 from utils import db
-from model import Instance, User
+from model import Instance, User, Image
 import requests
 import worker_cfg
 
@@ -35,8 +35,10 @@ def connect_docker_cli():
 def create_run_container(cli, *args, **kwargs):
     res = {'code': 'error', 'message': 'problem error'}
     image_id = kwargs.get('image_id')
-    image_name = worker_cfg.IMAGE_DICT.get(image_id)
-    container = cli.create_container(image=image_name, detach=True, name=kwargs.get('container_name'))
+    db_session = db.Session()
+    image_query_res = db_session.query(Image).filter(\
+            Image.id == image_id).first()
+    container = cli.create_container(image=image_query_res.image_name, detach=True, name=kwargs.get('container_name'))
     response = cli.start(container=container.get('Id'))
     if response is None:
         #supposed to be successful
@@ -48,6 +50,7 @@ def create_run_container(cli, *args, **kwargs):
         res['message'] = 'create successful'
         res['ins'] = {}
         res['ins']['image_id'] = kwargs.get('image_id')
+        res['ins']['image_name'] = image_query_res.image_name
         res['ins']['container_serial'] = container_serial
         res['ins']['container_name'] = kwargs.get('container_name')
         res['ins']['host'] = host

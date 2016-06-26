@@ -8,6 +8,7 @@ from utils import UiQueue
 from utils import eagle_logger, ui_logger
 import json
 from model import Instance
+from model import Image
 from model import User
 from utils import db
 
@@ -18,12 +19,14 @@ def list_instance():
     db_session = db.Session()
     user_query_result = db_session.query(User).filter(User.username == request.args.get('signin_username')).first()
     if user_query_result is not None:
-        instances = db_session.query(Instance).filter(Instance.user_id == user_query_result.id).all()
+        instances = db_session.query(Instance, Image).\
+                join(Image, Instance.image_id == Image.id).filter(Instance.user_id == user_query_result.id).all()
+    print instances
     ins_list = []
-    eagle_logger.debug('list: %s' % request.args.get('signin_user_name'))
-    for ins in instances:
+    for ins, img in instances:
         ins_item = {}
         ins_item['image_id'] = ins.image_id
+        ins_item['image_name'] = img.image_name
         ins_item['container_serial'] = ins.container_serial
         ins_item['container_name'] = ins.container_name
         ins_item['host'] = ins.host
