@@ -143,7 +143,7 @@
                                       <th>#</th>
                                       <th>vm serial</th> 
                                       <th>vm name</th>
-                                      <th>image_id</th>
+                                      <th>image name</th>
                                       <th>host</th>
                                       <th>port</th>
                                       <th>status</th>
@@ -151,13 +151,13 @@
                                     </tr>
 
                                     <tr ng-repeat="instance in instances">
-                                      <td>#</td>
+                                      <td>{{$index + 1}}</td>
                                       <td>{{instance.container_serial | limitTo : 10}}</td>
                                       <td>{{instance.container_name}}</td>
-                                      <td>{{instance.image_id}}</td> 
+                                      <td>{{instance.image_name}}</td> 
                                       <td>{{instance.host}}</td>
                                       <td>{{instance.port}}</td>
-                                      <td>{{instance.status}}</td>
+                                      <td>{{instance.status | filterStat}}</td>
                                       <td>
                                         <button ng-click="stopIns(instance.container_serial)">stop</button>
                                         <button ng-click="rmIns(instance.container_serial)">remove</button>
