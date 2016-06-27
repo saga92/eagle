@@ -129,15 +129,15 @@
                         <div>
                               <div ng-controller="showDashboard">
                                   <div>tips: {{ popup }}</div>
-                                  <p>Create your container:</p>
-                                  <form >
-                                      <select ng-model="selectedImage" ng-options="img.name for img in images">
+                                  <label class="control-label">Create your container:</label>
+                                  <form class="form-inline">
+                                      <select class="form-control" ng-model="selectedImage" ng-options="img.name for img in images">
                                       </select>
-                                      <input type="text" name="containerName" ng-model="containerName"/>
-                                      <button ng-click="createIns()">create</button>
+                                      <input class="form-control" type="text" name="containerName" ng-model="containerName"/>
+                                      <button class="btn btn-primary active" ng-click="createIns()">create</button>
                                       
                                   </form>
-                                  <p>Instance dashboard:</p>
+                                  <label class="control-label">Instance dashboard:</label>
                                   <table class="table table-striped">
                                     <tr>
                                       <th>#</th>
@@ -157,10 +157,18 @@
                                       <td>{{instance.image_name}}</td> 
                                       <td>{{instance.host}}</td>
                                       <td>{{instance.port}}</td>
-                                      <td>{{instance.status | filterStat}}</td>
                                       <td>
-                                        <button ng-click="stopIns(instance.container_serial)">stop</button>
-                                        <button ng-click="rmIns(instance.container_serial)">remove</button>
+                                        <span class="label label-{{instance.status | filterLabelStat}}">
+                                           {{instance.status | filterStat}}
+                                        </span>
+                                      </td>
+                                      <td>
+                                        <button> 
+                                        <i class="fa fa-pause" aria-hidden="true" ng-click="stopIns(instance.container_serial)"></i>
+                                        </button>
+                                        <button> 
+                                        <i class="fa fa-trash" aria-hidden="true" ng-click="rmIns(instance.container_serial)"></i>
+                                        </button>
                                       </td>
                                     </tr>
                                 </table>
