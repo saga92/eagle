@@ -32,23 +32,32 @@ def connect_docker_cli():
         cli = Client(base_url=worker_cfg.DOCKER_CLI_URL)
     return cli
 
-def processDB(res, status, **kwargs):
-    db_session = db.Session()
-    res['container_serial'] = kwargs.get('container_serial')
-    instance_query_res = db_session.query(Instance).filter(Instance.container_serial == kwargs.get('container_serial')).first()
-    instance_query_res.status = status
-    db_session.commit()
-
 def create_run_container(cli, *args, **kwargs):
     res = {'code': 'error', 'message': 'problem error'}
+    container = create_container(cli, *args, **kwargs)
+    if (container == None):
+        res['ins'] = {}
+        worker_logger.info("failed to create %s, create_container() crashed with APIError." % kwargs.get('container_name'))
+        return json.dumps(res)
+    else:
+        worker_logger.info("succeed to write %s in database." % kwargs.get('container_name'))
+
+    ret = run_container(cli, res, container, *args, **kwargs)
+    if (ret == None):
+        res['ins'] = {}
+        worker_logger.info("failed to start %s." % kwargs.get('container_name'))
+        return json.dumps(res)
+    else:
+        worker_logger.info("succeed to start %s." % kwargs.get('container_name'))
+        return ret
+
+def create_container(cli, *args, **kwargs):
     image_id = kwargs.get('image_id')
     image_name = worker_cfg.IMAGE_DICT.get(image_id)
     try:
         container = cli.create_container(image=image_name, detach=True, name=kwargs.get('container_name'))
     except docker.errors.APIError:
-        res['ins'] = {}
-        worker_logger.info("failed to create %s, create_container() crashed with APIError." % kwargs.get('container_name'))
-        return json.dumps(res)
+        return None
 
     container_serial = container.get('Id')
     inspect_res = cli.inspect_container(container.get('Id')) #inspect_res is validate after container start
@@ -64,15 +73,18 @@ def create_run_container(cli, *args, **kwargs):
                    host, port, 6)
     db_session.add(ins)
     db_session.commit()
-    worker_logger.info("succeed to write %s in database." % kwargs.get('container_name'))
+    return container
 
+def run_container(cli, res, container, *args, **kwargs):
     response = cli.start(container=container.get('Id'))
     if response is None:
         #update db
         db_session = db.Session()
+        container_serial = container.get('Id')
         instance_query_res = db_session.query(Instance).filter(Instance.container_serial == container_serial).first()
         inspect_res = cli.inspect_container(container.get('Id'))
         host = inspect_res["NetworkSettings"]["IPAddress"]
+        port = 22
         instance_query_res.host = host
         instance_query_res.status = 1
         db_session.commit()
@@ -89,9 +101,9 @@ def create_run_container(cli, *args, **kwargs):
         res['ins']['user_name'] = kwargs.get('user_name')
         res['ins']['status'] = 1           
 
-        worker_logger.info("succeed to create %s." % kwargs.get('container_name'))
-    return json.dumps(res)
-
+        return json.dumps(res)
+    else:
+        return None
 
 def stop_container(cli, *args, **kwargs):
     res = {'code': 'error', 'message': 'problem error'}
@@ -99,7 +111,7 @@ def stop_container(cli, *args, **kwargs):
     try:
         response = cli.stop(kwargs.get('container_serial'))
     except docker.errors.NotFound:
-        processDB(res, 5, **kwargs)
+        updateDB(res, 5, **kwargs)
         worker_logger.info("failed to stop %s. stop() crahsed with NotFound" % kwargs.get('container_name'))
         return json.dumps(res)
     
@@ -108,7 +120,7 @@ def stop_container(cli, *args, **kwargs):
         res['code'] = 'ok'
         res['message'] = 'stop successful'
 
-        processDB(res, 2, **kwargs)
+        updateDB(res, 2, **kwargs)
         worker_logger.info("succeed to stop %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
@@ -118,7 +130,7 @@ def restart_container(cli, *args, **kwargs):
     try:
         response = cli.start(container=kwargs.get('container_serial'))
     except docker.errors.NotFound:
-        processDB(res, 5, **kwargs)
+        updateDB(res, 5, **kwargs)
         worker_logger.info("failed to restart %s. restart() crahsed with NotFound" % kwargs.get('container_name'))
         return json.dumps(res)
 
@@ -126,7 +138,7 @@ def restart_container(cli, *args, **kwargs):
         res['code'] = 'ok'
         res['message'] = 'restart successful'
 
-        processDB(res, 1, **kwargs)
+        updateDB(res, 1, **kwargs)
         worker_logger.info("succeed to restart %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
@@ -136,7 +148,7 @@ def remove_container(cli, *args, **kwargs):
     try:
         response = cli.remove_container(container=kwargs.get('container_serial'), force=True)
     except docker.errors.NotFound:
-        processDB(res, 5, **kwargs)
+        updateDB(res, 5, **kwargs)
         worker_logger.info("failed to remove %s. remove() crahsed with NotFound" % kwargs.get('container_name'))
         return json.dump(res)
 
