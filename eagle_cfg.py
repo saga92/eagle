@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 ##db configuration
-DB_HOST = '127.0.0.1'
+DB_HOST = '172.17.0.2'
 DB_PORT = '3306'
 DB_USERNAME = 'root'
 DB_PASSWORD = 'root123'
 DB_NAME = 'eagle'
 
 ##mq configuration
-MQ_HOST = '127.0.0.1'
+MQ_HOST = '172.17.0.3'
 MQ_PORT = 5672
 MQ_USERNAME = 'root'
 MQ_PASSWORD = 'root'
@@ -26,3 +26,5 @@ CREATE_INSTANCE = 1
 STOP_INSTANCE = 2
 REMOVE_INSTANCE = 3
 RESTART_INSTANCE = 4
+FAILED_INSTANCE = 5
+PENDING_INSTANCE = 6
