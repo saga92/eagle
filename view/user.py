@@ -84,3 +84,7 @@ def sign_up():
             res['message'] = 'sign up successful'
         return jsonify(**res)
     return render_template('index.html')
+
+@app.route('/test', methods=['GET'])
+def test():
+    return json.dumps({"success":True})
