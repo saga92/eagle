@@ -4,7 +4,7 @@
 from utils import db
 from model import Instance
 
-def update_status_by_serial(status, container_serial):
+def update_status_by_id(container_serial, status):
     db_session = db.Session()
     instance_query_res = db_session.query(Instance).filter(Instance.container_serial == container_serial).first()
     instance_query_res.status = status

@@ -9,10 +9,9 @@ from model import Instance, User, Image
 import requests
 import worker_cfg
 import docker
-from dao import update_status_by_serial
+from dao import update_status_by_id
 
 def worker_handler(message):
-    res = None
     policy = json.loads(message)
     cli = connect_docker_cli()
     if policy['operate'] == worker_cfg.CREATE_INSTANCE:
@@ -118,14 +117,14 @@ def stop_container(cli, *args, **kwargs):
         response = cli.stop(kwargs.get('container_serial'))
     except docker.errors.NotFound:
         res['container_serial'] = kwargs.get('container_serial')
-        update_status_by_serial(5, kwargs.get('container_serial'))
+        update_status_by_id(kwargs.get('container_serial'), 5)
         worker_logger.info("failed to stop %s. stop() crashed with NotFound" % kwargs.get('container_name'))
         return json.dumps(res)
 
     res['code'] = 'ok'
     res['message'] = 'stop successful'
     res['container_serial'] = kwargs.get('container_serial')
-    update_status_by_serial(2, kwargs.get('container_serial'))
+    update_status_by_id(kwargs.get('container_serial'), 2)
     worker_logger.info("succeed to stop %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
@@ -136,7 +135,7 @@ def restart_container(cli, *args, **kwargs):
         response = cli.start(container=kwargs.get('container_serial'))
     except docker.errors.NotFound:
         res['container_serial'] = kwargs.get('container_serial')
-        update_status_by_serial(5, kwargs.get('container_serial'))
+        update_status_by_id(kwargs.get('container_serial'), 5)
         worker_logger.info("failed to restart %s. restart() crashed with NotFound" % kwargs.get('container_name'))
         return json.dumps(res)
 
@@ -144,7 +143,7 @@ def restart_container(cli, *args, **kwargs):
         res['code'] = 'ok'
         res['message'] = 'restart successful'
         res['container_serial'] = kwargs.get('container_serial')
-        update_status_by_serial(1, kwargs.get('container_serial'))
+        update_status_by_id(kwargs.get('container_serial'), 1)
         worker_logger.info("succeed to restart %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
@@ -155,7 +154,7 @@ def remove_container(cli, *args, **kwargs):
         response = cli.remove_container(container=kwargs.get('container_serial'), force=True)
     except docker.errors.NotFound:
         res['container_serial'] = kwargs.get('container_serial')
-        update_status_by_serial(5, kwargs.get('container_serial'))
+        update_status_by_id(kwargs.get('container_serial'), 5)
         worker_logger.info("failed to remove %s. remove() crashed with NotFound" % kwargs.get('container_name'))
         return json.dump(res)
 
