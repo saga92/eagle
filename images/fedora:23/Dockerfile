@@ -1,4 +1,4 @@
-FROM fedora:latest
+FROM daocloud.io/library/fedora:23
 
 RUN echo y > dnf update && dnf install -y openssh-server &&\
     rm -f /etc/ssh/ssh_host_ecdsa_key /etc/ssh/ssh_host_rsa_key && \

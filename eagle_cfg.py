@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 ##db configuration
-DB_USERNAME = 'root'
-DB_PASSWORD = 'root123'
 DB_HOST = '172.17.0.2'
 DB_PORT = '3306'
+DB_USERNAME = 'root'
+DB_PASSWORD = 'root123'
 DB_NAME = 'eagle'
 
 ##mq configuration
@@ -27,4 +27,4 @@ STOP_INSTANCE = 2
 REMOVE_INSTANCE = 3
 RESTART_INSTANCE = 4
 FAILED_INSTANCE = 5
-PENDING_ISNTANCE = 6
+PENDING_INSTANCE = 6

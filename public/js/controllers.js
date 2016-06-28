@@ -2,7 +2,7 @@
 
 
 angular.module("app.controllers", [ ])
-
+    
     .controller("showDashboard", ['$scope', 'Session', '$http', '$window',
         function ($scope, Session, $http, $window) {
             Session.get('is_login', function(res){
@@ -13,7 +13,9 @@ angular.module("app.controllers", [ ])
             })
             $scope.images=[
                 {id:1, name:"ubuntu 14.04"},
-                {id:2, name:"centos 7"}
+                {id:2, name:"centos 7"},
+                {id:3, name:"fedora 23"},
+                {id:4, name:"debian 8"}
             ];
             $scope.containerName = "dev-container";
             Session.get("signin_user_name", function(res){
@@ -27,7 +29,7 @@ angular.module("app.controllers", [ ])
                     console.log($scope.instances)
                 });
             });
-
+            
             $scope.createIns=function(){
                 Session.get("signin_user_name", function(res){
                     var signInUsername = res;

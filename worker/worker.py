@@ -5,9 +5,11 @@ import json
 from utils import WorkerQueue
 from utils import worker_logger
 from utils import db
-from model import Instance, User
+from model import Instance, User, Image
+import requests
 import worker_cfg
 import docker
+from dao import update_status_by_serial
 
 def worker_handler(message):
     res = None
@@ -42,7 +44,7 @@ def create_run_container(cli, *args, **kwargs):
     else:
         worker_logger.info("succeed to write %s in database." % kwargs.get('container_name'))
 
-    ret = run_container(cli, res, container, *args, **kwargs)
+    ret = run_container(cli, container, *args, **kwargs)
     if (ret == None):
         res['ins'] = {}
         worker_logger.info("failed to start %s." % kwargs.get('container_name'))
@@ -75,7 +77,8 @@ def create_container(cli, *args, **kwargs):
     db_session.commit()
     return container
 
-def run_container(cli, res, container, *args, **kwargs):
+def run_container(cli, container, *args, **kwargs):
+    res = {'code': 'error', 'message': 'problem error'}
     response = cli.start(container=container.get('Id'))
     if response is None:
         #update db
@@ -88,22 +91,25 @@ def run_container(cli, res, container, *args, **kwargs):
         instance_query_res.host = host
         instance_query_res.status = 1
         db_session.commit()
-
+        image_query_res = db_session.query(Image).filter(Image.id == kwargs.get('image_id')).first()
+        
         #supposed to be successful
         res['code'] = 'ok'
         res['message'] = 'create successful'
         res['ins'] = {}
         res['ins']['image_id'] = kwargs.get('image_id')
+        res['ins']['image_name'] = image_query_res.image_name
         res['ins']['container_serial'] = container_serial
         res['ins']['container_name'] = kwargs.get('container_name')
         res['ins']['host'] = host
         res['ins']['port'] = port
         res['ins']['user_name'] = kwargs.get('user_name')
-        res['ins']['status'] = 1           
+        res['ins']['status'] = 1
 
         return json.dumps(res)
     else:
-        return None
+        res['container_serial'] = kwargs.get('container_serial')
+        return json.dumps(res)
 
 def stop_container(cli, *args, **kwargs):
     res = {'code': 'error', 'message': 'problem error'}
@@ -111,17 +117,16 @@ def stop_container(cli, *args, **kwargs):
     try:
         response = cli.stop(kwargs.get('container_serial'))
     except docker.errors.NotFound:
-        updateDB(res, 5, **kwargs)
-        worker_logger.info("failed to stop %s. stop() crahsed with NotFound" % kwargs.get('container_name'))
+        res['container_serial'] = kwargs.get('container_serial')
+        update_status_by_serial(5, kwargs.get('container_serial'))
+        worker_logger.info("failed to stop %s. stop() crashed with NotFound" % kwargs.get('container_name'))
         return json.dumps(res)
-    
-    if response is None:
-        #supposed to be successful
-        res['code'] = 'ok'
-        res['message'] = 'stop successful'
 
-        updateDB(res, 2, **kwargs)
-        worker_logger.info("succeed to stop %s." % kwargs.get('container_name'))
+    res['code'] = 'ok'
+    res['message'] = 'stop successful'
+    res['container_serial'] = kwargs.get('container_serial')
+    update_status_by_serial(2, kwargs.get('container_serial'))
+    worker_logger.info("succeed to stop %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
 def restart_container(cli, *args, **kwargs):
@@ -130,15 +135,16 @@ def restart_container(cli, *args, **kwargs):
     try:
         response = cli.start(container=kwargs.get('container_serial'))
     except docker.errors.NotFound:
-        updateDB(res, 5, **kwargs)
-        worker_logger.info("failed to restart %s. restart() crahsed with NotFound" % kwargs.get('container_name'))
+        res['container_serial'] = kwargs.get('container_serial')
+        update_status_by_serial(5, kwargs.get('container_serial'))
+        worker_logger.info("failed to restart %s. restart() crashed with NotFound" % kwargs.get('container_name'))
         return json.dumps(res)
 
     if response is None:
         res['code'] = 'ok'
         res['message'] = 'restart successful'
-
-        updateDB(res, 1, **kwargs)
+        res['container_serial'] = kwargs.get('container_serial')
+        update_status_by_serial(1, kwargs.get('container_serial'))
         worker_logger.info("succeed to restart %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
@@ -148,8 +154,9 @@ def remove_container(cli, *args, **kwargs):
     try:
         response = cli.remove_container(container=kwargs.get('container_serial'), force=True)
     except docker.errors.NotFound:
-        updateDB(res, 5, **kwargs)
-        worker_logger.info("failed to remove %s. remove() crahsed with NotFound" % kwargs.get('container_name'))
+        res['container_serial'] = kwargs.get('container_serial')
+        update_status_by_serial(5, kwargs.get('container_serial'))
+        worker_logger.info("failed to remove %s. remove() crashed with NotFound" % kwargs.get('container_name'))
         return json.dump(res)
 
     if response is None:
@@ -160,10 +167,12 @@ def remove_container(cli, *args, **kwargs):
 
         #write db
         db_session = db.Session()
-        instance_query_res = db_session.query(Instance).filter(Instance.container_serial == kwargs.get('container_serial')).first()
+        instance_query_res = db_session.query(Instance).filter(\
+                Instance.container_serial == kwargs.get('container_serial')).first()
+        container_name = instance_query_res.container_name
         db_session.delete(instance_query_res)
         db_session.commit()
-        worker_logger.info("succeed to remove %s." % kwargs.get('container_name'))
+        worker_logger.info("succeed to remove %s." % container_name)
     return json.dumps(res)
 
 if __name__ == '__main__':

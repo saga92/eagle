@@ -1,4 +1,4 @@
-FROM centos:centos7
+FROM daocloud.io/library/centos:7.1.1503
 
 RUN yum -y install openssh-server epel-release && \
     yum -y install pwgen && \

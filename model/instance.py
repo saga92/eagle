@@ -8,7 +8,7 @@ from sqlalchemy import Column, Integer, String, DateTime
 class Image(Base):
     __tablename__ = 'image'
     id = Column(Integer, primary_key=True)
-    hashcode = Column(String(128), nullable=False)
+    image_name = Column(String(128), nullable=False)
     description = Column(String(512), nullable=False)
     create_time = Column(DateTime, nullable=False)
     update_time = Column(DateTime, nullable=False)
