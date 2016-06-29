@@ -99,3 +99,28 @@ def sign_up():
             res['message'] = 'sign up successful'
         return jsonify(**res)
     return render_template('index.html')
+
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    res={};
+    res['code'] = '0x8'
+    res['message'] = 'modify profile successful'
+    if request.methods == 'POST':
+        eagle_logger.debug(type(request.data))
+        req_data = json.loads(request.data)        
+        result = get_user_by_username(req_data['username'])
+        req_id = req_data.get('id', None)
+        req_email = req_data.get('email', None)
+        if req_email is not None:
+            db_session = db.Session()
+            result_User = db_session.query(User).filter(User.email == req_email).first()                   
+            if result_User is not None and req_id != result_User.get('id', None):
+                res['code'] = '0x5'
+                res['message'] = 'Email has been occupied by others'
+            else:
+                update_email_by_id(req_id, req_email)
+        req_password = req_data.get('password', None)
+        if req_password is not None:
+            update_password_by_id(req_id, req_password)
+        return jsonify(**res)
+    return render_template('index.html')
