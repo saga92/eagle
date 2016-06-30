@@ -3,7 +3,7 @@
 
 ##db configuration
 DB_USERNAME = 'root'
-DB_PASSWORD = 'root'
+DB_PASSWORD = 'root123'
 DB_HOST = '172.17.0.2'
 DB_PORT = '3306'
 DB_NAME = 'eagle'
