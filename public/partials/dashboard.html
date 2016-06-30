@@ -152,22 +152,22 @@
 
                                     <tr ng-repeat="instance in instances">
                                       <td>{{$index + 1}}</td>
-                                      <td>{{instance.container_serial | limitTo : 10}}</td>
+                                      <td>{{instance.container_serial | limitTo : 10 | filterSerial}}</td>
                                       <td>{{instance.container_name}}</td>
                                       <td>{{instance.image_name}}</td> 
-                                      <td>{{instance.host}}</td>
-                                      <td>{{instance.port}}</td>
+                                      <td>{{instance.host | filterHost}}</td>
+                                      <td>{{instance.port | filterPort}}</td>
                                       <td>
                                         <span class="label label-{{instance.status | filterLabelStat}}">
                                            {{instance.status | filterStat}}
                                         </span>
                                       </td>
                                       <td>
-                                        <button> 
-                                        <i class="fa fa-pause" aria-hidden="true" ng-click="stopIns(instance.container_serial)"></i>
+                                        <button class="btn btn-default btn-sm" ng-click="stopIns(instance.container_serial)" disa> 
+                                        <i class="fa fa-pause" aria-hidden="true"  ></i>
                                         </button>
-                                        <button> 
-                                        <i class="fa fa-trash" aria-hidden="true" ng-click="rmIns(instance.container_serial)"></i>
+                                        <button class="btn btn-default btn-sm {{instance.status | filterDisabled}}" ng-click="rmIns(instance.container_serial)" "{{instance.status | filterDisabled}}"> 
+                                        <i class="fa fa-trash" aria-hidden="true" ></i>
                                         </button>
                                       </td>
                                     </tr>

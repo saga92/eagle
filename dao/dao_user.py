@@ -29,6 +29,3 @@ def update_user(id, *args, **kwargs):
         getattr(user_query_res, key) = kwargs.get(key)
     db_session.commit()
 
-
-
-
