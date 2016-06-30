@@ -61,8 +61,8 @@ def sign_up():
     if request.method == 'POST':
         eagle_logger.debug(type(request.data))
         req_data = json.loads(request.data)
-        db_session = db.Session()
-        result = db_session.query(User).filter(User.username == req_data['username']).first()
+        #db_session = db.Session()
+        result = db.Session().query(User).filter(User.username == req_data['username']).first()
         req_email =  req_data.get('email', None)
         if req_email is not None:
             result_mail = db_session.query(User).filter(User.email == req_email).first()
