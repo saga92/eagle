@@ -13,7 +13,9 @@ angular.module("app.controllers", [ ])
             })
             $scope.images=[
                 {id:1, name:"ubuntu 14.04"},
-                {id:2, name:"centos 7"}
+                {id:2, name:"centos 7"},
+                {id:3, name:"fedora 23"},
+                {id:4, name:"debian 8"}
             ];
             $scope.containerName = "dev-container";
             Session.get("signin_user_name", function(res){
@@ -23,19 +25,7 @@ angular.module("app.controllers", [ ])
                         signin_username: signInUsername
                     }
                 }).success(function(data){
-                    for(var i=0; i<data.instances.length; ++i){
-                        data.instances[i].container_serial = data.instances[i].container_serial.substring(0,10);
-                    }
-                    data.statusStr = "stop";
-                    console.log(data.statusStr);
                     $scope.instances = data.instances;
-                    for(var i=0; i<$scope.instances.length; ++i){
-                            if($scope.instances[i].status==2){
-                                $scope.instances[i].statusStr = "restart";
-                            }else if($scope.instances[i].status==1){
-                                $scope.instances[i].statusStr = "stop";
-                            }
-                    }
                     console.log($scope.instances)
                 });
             });
@@ -51,8 +41,9 @@ angular.module("app.controllers", [ ])
                     });
 
                     $http.post(url, parameter).success(function(data){
-                        data.instance.container_serial = data.instance.container_serial.substring(0,10);
-                        $scope.instances.push(data.instance);
+                        if(data.code == 'ok'){
+                            $scope.instances.push(data.instance);
+                        }
                         $scope.popup = data.message;
                     }).error(function(data){
                         $scope.popup = data.message;
@@ -64,29 +55,20 @@ angular.module("app.controllers", [ ])
                 Session.get("signin_user_name", function(res){
                     var signInUsername = res;
                     var url = "/stop_ins";
-                    var parameter = {
+                    var parameter = JSON.stringify({
                         container_serial: containerSerial,
                         user_name: signInUsername
-                    };
-                    alert(parameter.container_serial);
+                    });
 
-
-                   $http.post(url, parameter).success(function(data){
-
+                    $http.post(url, parameter).success(function(data){
+                        console.log(data)
                         for(var i=0; i<$scope.instances.length; ++i){
                             if($scope.instances[i].container_serial == data.container_serial){
-                                if($scope.instances[i].status == 2){
-                                    $scope.instances[i].status = 1;
-                                    $scope.instances[i].statusStr ="stop";
-                                    break;
-                                }else if($scope.instances[i].status == 1){
-                                    $scope.instances[i].status = 2;
-                                    $scope.instances[i].statusStr ="restart";
-                                    break;
-                                }
+                                $scope.instances[i].status = 2;
+                                break;
                             }
                         }
-                       $scope.popup = data.message;
+                        $scope.popup = data.message;
                     }).error(function(data){
                         $scope.popup = data.message;
                     });
@@ -125,7 +107,7 @@ angular.module("app.controllers", [ ])
                     username: $scope.username,
                     password: $scope.password
                 });
-            	$http.post(url, parameter).success(function(data){
+                $http.post(url, parameter).success(function(data){
                     if(data.code == 'ok'){
                         $window.location.href = '#/';
                     }else{
