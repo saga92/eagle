@@ -9,7 +9,6 @@ from model import Instance, User, Image
 import requests
 import worker_cfg
 from dao import *
-import traceback
 import docker
 
 def worker_handler(message):
@@ -39,9 +38,8 @@ def create_container(cli, *args, **kwargs):
     user_id = user_query_res.id
     try:
         container = cli.create_container(image=image_name, detach=True, name=kwargs.get('container_name'))
-    except docker.errors.APIError:
-        msg = traceback.format_exc()
-        msg = msg[msg.find('APIError:'):]
+    except docker.errors.APIError as e:
+        msg = str(e)
         res['code'] = '0x3'
         res['message'] = msg
         res['ins']['container_serial'] = ''
@@ -50,6 +48,7 @@ def create_container(cli, *args, **kwargs):
         res['ins']['host'] = ''
         res['ins']['port'] = 0
         res['ins']['container_name'] = kwargs.get('container_name')
+        res['ins']['image_name'] = image_name
         res['ins']['status'] = worker_cfg.FAILED_INSTANCE
         worker_logger.error("failed to create %s. %s" % (kwargs.get('container_name'), msg))
     else:
@@ -62,6 +61,7 @@ def create_container(cli, *args, **kwargs):
         res['ins']['host'] = ''
         res['ins']['port'] = 0
         res['ins']['container_name'] = kwargs.get('container_name')
+        res['ins']['image_name'] = image_name
         res['ins']['status'] = worker_cfg.STOP_INSTANCE
         worker_logger.info("succeed to write %s in database." % kwargs.get('container_name'))
     create_instance(res['ins'])
@@ -76,9 +76,8 @@ def run_container(cli, *args, **kwargs):
         inspect_res = cli.inspect_container(container_serial)
         host = inspect_res["NetworkSettings"]["IPAddress"]
         port = 22
-        update_status_by_serial(container_serial, worker_cfg.RUNNING_INSTANCE)
-        update_host_by_serial(container_serial, host)
-        update_port_by_serial(container_serial, port)
+        update_col_by_serial(container_serial, status=worker_cfg.RUNNING_INSTANCE,\
+                host=host, port=port)
         db_session = db.Session()
         image_query_res = db_session.query(Image).filter(\
                 Image.id == kwargs.get('image_id')).first()
@@ -110,18 +109,18 @@ def stop_container(cli, *args, **kwargs):
     response = None
     try:
         response = cli.stop(container=kwargs.get('container_serial'))
-    except docker.errors.NotFound:
+    except docker.errors.NotFound as e:
         res['container_serial'] = kwargs.get('container_serial')
         update_status_by_serial(kwargs.get('container_serial'), worker_cfg.FAILED_INSTANCE)
-        msg = traceback.format_exc()
-        msg = msg[msg.find('NotFound:'):]
+        msg = str(e)
         res['message'] = msg
         worker_logger.error("failed to stop %s. %s" % (kwargs.get('container_name'), msg))
     else:
         res['code'] = '0x1'
         res['message'] = 'stop successful'
         res['container_serial'] = kwargs.get('container_serial')
-        update_status_by_serial(kwargs.get('container_serial'), worker_cfg.STOP_INSTANCE)
+        update_col_by_serial(kwargs.get('container_serial'), status=worker_cfg.STOP_INSTANCE,\
+                host='', port=0)
         worker_logger.info("succeed to stop %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
@@ -130,11 +129,10 @@ def restart_container(cli, *args, **kwargs):
     response = None
     try:
         response = cli.restart(container=kwargs.get('container_serial'))
-    except docker.errors.NotFound:
+    except docker.errors.NotFound as e:
         res['container_serial'] = kwargs.get('container_serial')
         update_status_by_serial(kwargs.get('container_serial'), worker_cfg.FAILED_INSTANCE)
-        msg = traceback.format_exc()
-        msg = msg[msg.find('NotFound:'):]
+        msg = str(e)
         res['message'] = msg
         worker_logger.error("failed to restart %s. %s" % (kwargs.get('container_name'), msg))
     else:
@@ -142,7 +140,11 @@ def restart_container(cli, *args, **kwargs):
             res['code'] = '0x1'
             res['message'] = 'restart successful'
             res['container_serial'] = kwargs.get('container_serial')
-            update_status_by_serial(kwargs.get('container_serial'), worker_cfg.RUNNING_INSTANCE)
+            inspect_res = cli.inspect_container(kwargs.get('container_serial'))
+            host = inspect_res["NetworkSettings"]["IPAddress"]
+            port = 22
+            update_col_by_serial(kwargs.get('container_serial'), status=worker_cfg.RUNNING_INSTANCE,\
+                    host=host, port=port)
             worker_logger.info("succeed to restart %s." % kwargs.get('container_name'))
         else:
             res['container_serial'] = kwargs.get('container_serial')
@@ -154,11 +156,10 @@ def remove_container(cli, *args, **kwargs):
     response = None
     try:
         response = cli.remove_container(container=kwargs.get('container_serial'), force=True)
-    except docker.errors.NotFound:
+    except docker.errors.NotFound as e:
         res['container_serial'] = kwargs.get('container_serial')
         update_status_by_serial(kwargs.get('container_serial'), worker_cfg.FAILED_INSTANCE)
-        msg = traceback.format_exc()
-        msg = msg[msg.find('NotFound:'):]
+        msg = str(e)
         res['message'] = msg
         worker_logger.error("failed to remove %s. %s" % (kwargs.get('container_name'), msg))
     else:

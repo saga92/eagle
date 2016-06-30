@@ -4,6 +4,13 @@
 from utils import db
 from model import User
 
+def update_user(id, *args, **kwargs):
+    db_session = db.Session()
+    user_query_res = db_session.query(User).filter(User.id == id).first()
+    for key in kwargs:
+        setattr(user_query_res, key, kwargs.get(key))
+    db_session.commit()
+
 def update_password(id, password):
     update_user(id, password=password)
 
@@ -21,11 +28,4 @@ def update_update_time(id, update_time):
 
 def update_is_deleted(id, is_deleted):
     update_user(id, is_deleted=is_deleted)
-
-def update_user(id, *args, **kwargs):
-    db_session = db.Session()
-    user_query_res = db_session.query(User).filter(User.id == id).first()
-    for key, value in kwargs:
-        getattr(user_query_res, key) = kwargs.get(key)
-    db_session.commit()
 

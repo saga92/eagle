@@ -158,16 +158,16 @@
                                       <td>{{instance.host | filterHost}}</td>
                                       <td>{{instance.port | filterPort}}</td>
                                       <td>
-                                        <span class="label label-{{instance.status | filterLabelStat}}">
+                                        <span class="label label-{{instance.status | filterLabelStat}} stat">
                                            {{instance.status | filterStat}}
                                         </span>
                                       </td>
                                       <td>
-                                        <button class="btn btn-default btn-sm" ng-click="stopIns(instance.container_serial)" disa> 
-                                        <i class="fa fa-pause" aria-hidden="true"  ></i>
+                                        <button class="btn btn-default btn-sm" ng-click="stopIns(instance.container_serial)" ng-disabled="{{instance.status == 3}}"> 
+                                        <i class="fa fa-pause fa-lg" aria-hidden="true"  ></i>
                                         </button>
-                                        <button class="btn btn-default btn-sm {{instance.status | filterDisabled}}" ng-click="rmIns(instance.container_serial)" "{{instance.status | filterDisabled}}"> 
-                                        <i class="fa fa-trash" aria-hidden="true" ></i>
+                                        <button class="btn btn-default btn-sm" ng-click="rmIns(instance.container_serial)" ng-disabled="{{instance.status == 3}}"> 
+                                        <i class="fa fa-trash fa-lg" aria-hidden="true" ></i>
                                         </button>
                                       </td>
                                     </tr>

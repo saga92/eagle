@@ -58,7 +58,7 @@ angular.module("app.services", [])
 		function decorateFilter(input) {
 			var stat = "";
 			if(input == 3){
-				stat = "disabled"; 
+				stat = "false"; 
 			}
     		return stat;
   		}

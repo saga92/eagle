@@ -42,9 +42,7 @@ angular.module("app.controllers", [ ])
 
                     $http.post(url, parameter).success(function(data){
                         console.log(data);
-                        if(data.code == "0x1"){
-                            $scope.instances.push(data.instance);
-                        }
+                        $scope.instances.push(data.instance);
                         $scope.popup = data.message;
                     }).error(function(data){
                         $scope.popup = data.message;
@@ -67,6 +65,8 @@ angular.module("app.controllers", [ ])
                             for(var i=0; i<$scope.instances.length; ++i){
                                 if($scope.instances[i].container_serial == data.container_serial){
                                     $scope.instances[i].status = 2;
+                                    $scope.instances[i].host="-";
+                                    $scope.instances[i].port="-";
                                     break;
                                 }
                             }
