@@ -18,15 +18,20 @@ create table `user` (
 
 create table `image` (
     `id` int(11) not null auto_increment,
-    `hashcode` varchar(128) not null default '' comment 'image hashcode',
+    `image_name` varchar(128) not null default '' comment 'image name',
     `description` varchar(512) not null default '' comment 'image description',
     `create_time` datetime not null default '0000-00-00 00:00' comment 'create_time',
     `update_time` datetime not null default '0000-00-00 00:00' comment 'update_time',
     `is_deleted` tinyint(3) not null default '0' comment '1:deleted',
     primary key (`id`),
-    key `idx_hash` (`hashcode`),
+    key `idx_hash` (`image_name`),
     key `idx_is_deleted` (`is_deleted`)
 )engine=InnoDB DEFAULT CHARSET=utf8 comment 'image';
+
+insert into `image` values (1, 'eagle-ubuntu:14.04', '', now(), now(), 0);
+insert into `image` values (2, 'eagle-centos:7', '', now(), now(), 0);
+insert into `image` values (3, 'eagle-fedora:23', '', now(), now(), 0);
+insert into `image` values (4, 'eagle-debian:8', '', now(), now(), 0);
 
 create table `instance` (
     `id` int(11) not null auto_increment,

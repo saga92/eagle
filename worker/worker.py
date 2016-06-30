@@ -5,7 +5,7 @@ import json
 from utils import WorkerQueue
 from utils import worker_logger
 from utils import db
-from model import Instance, User
+from model import Instance, User, Image
 import requests
 import worker_cfg
 
@@ -35,8 +35,10 @@ def connect_docker_cli():
 def create_run_container(cli, *args, **kwargs):
     res = {'code': 'error', 'message': 'problem error'}
     image_id = kwargs.get('image_id')
-    image_name = worker_cfg.IMAGE_DICT.get(image_id)
-    container = cli.create_container(image=image_name, detach=True, name=kwargs.get('container_name'))
+    db_session = db.Session()
+    image_query_res = db_session.query(Image).filter(\
+            Image.id == image_id).first()
+    container = cli.create_container(image=image_query_res.image_name, detach=True, name=kwargs.get('container_name'))
     response = cli.start(container=container.get('Id'))
     if response is None:
         #supposed to be successful
@@ -48,6 +50,7 @@ def create_run_container(cli, *args, **kwargs):
         res['message'] = 'create successful'
         res['ins'] = {}
         res['ins']['image_id'] = kwargs.get('image_id')
+        res['ins']['image_name'] = image_query_res.image_name
         res['ins']['container_serial'] = container_serial
         res['ins']['container_name'] = kwargs.get('container_name')
         res['ins']['host'] = host
@@ -56,14 +59,15 @@ def create_run_container(cli, *args, **kwargs):
         res['ins']['status'] = 1
 
         #write db
-        user_query_res = db.session.query(User).filter(\
+        db_session = db.Session()
+        user_query_res = db_session.query(User).filter(\
                 User.username == kwargs.get('user_name')).first()
         user_id = user_query_res.id
         ins = Instance(kwargs.get('image_id'), \
                 user_id, kwargs.get('container_name'), container_serial,
                 host, port, 1)
-        db.session.add(ins)
-        db.session.commit()
+        db_session.add(ins)
+        db_session.commit()
         worker_logger.info("succeed to create %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
@@ -77,10 +81,11 @@ def stop_container(cli, *args, **kwargs):
         res['container_serial'] = kwargs.get('container_serial')
 
         #write db
-        instance_query_res = db.session.query(Instance).filter(\
+        db_session = db.Session()
+        instance_query_res = db_session.query(Instance).filter(\
                 Instance.container_serial == kwargs.get('container_serial')).first()
         instance_query_res.status = 2
-        db.session.commit()
+        db_session.commit()
         worker_logger.info("succeed to stop %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
@@ -93,10 +98,11 @@ def restart_container(cli, *args, **kwargs):
         res['container_serial'] = kwargs.get('container_serial')
 
         #write db
-        instance_query_res = db.session.query(Instance).filter(\
+        db_session = db.Session()
+        instance_query_res = db_session.query(Instance).filter(\
             Instance.container_serial == kwargs.get('container_serial')).first()
         instance_query_res.status = 1
-        db.session.commit()
+        db_session.commit()
         worker_logger.info("succeed to restart %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
@@ -110,10 +116,11 @@ def remove_container(cli, *args, **kwargs):
         res['container_serial'] = kwargs.get("container_serial")
 
         #write db
-        instance_query_res = db.session.query(Instance).filter(\
+        db_session = db.Session()
+        instance_query_res = db_session.query(Instance).filter(\
                 Instance.container_serial == kwargs.get('container_serial')).first()
-        db.session.delete(instance_query_res)
-        db.session.commit()
+        db_session.delete(instance_query_res)
+        db_session.commit()
         worker_logger.info("succeed to remove %s." % kwargs.get('container_name'))
     return json.dumps(res)
 
