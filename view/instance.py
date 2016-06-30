@@ -48,7 +48,7 @@ def create_instance():
             Instance.container_name == req_data['container_name']).first()
         if instance_query_result is None:
             policy = {}
-            policy['operate'] = app.config['CREATE_INSTANCE']
+            policy['operate'] = app.config['CREATE']
             policy['image_id'] = req_data['image_id']
             policy['container_name'] = req_data['container_name']
             policy['user_name'] = req_data['user_name']
@@ -78,7 +78,7 @@ def stop_instance():
             Instance.container_serial == req_data['container_serial']).first()
         if instance_query_result is not None:
             policy = {}
-            policy['operate'] = app.config['STOP_INSTANCE']
+            policy['operate'] = app.config['STOP']
             policy['container_serial'] = req_data['container_serial']
             policy['container_name'] = instance_query_result.container_name
             policy['user_name'] = req_data['user_name']
@@ -105,7 +105,7 @@ def restart_instance():
             Instance.container_serial == req_data['container_serial']).first()
         if instance_query_result is not None:
             policy = {}
-            policy['operate'] = app.config['RESTART_INSTANCE']
+            policy['operate'] = app.config['RESTART']
             policy['container_serial'] = req_data['container_serial']
             policy['container_name'] = instance_query_result.container_name
             policy['user_name'] = req_data['user_name']
@@ -130,7 +130,7 @@ def remove_instance():
             Instance.container_serial == req_data['container_serial']).first()
         if instance_query_result is not None:
             policy = {}
-            policy['operate'] = app.config['REMOVE_INSTANCE']
+            policy['operate'] = app.config['REMOVE']
             policy['container_serial'] = req_data['container_serial']
             policy['user_name'] = req_data['user_name']
             message = json.dumps(policy)

@@ -33,7 +33,7 @@ def sign_in():
         result = db_session.query(User).filter(or_(User.username == req_data['username']\
             , User.email == req_data['username'])).first()
         if result is None:
-            res['code'] = 'err'
+            res['code'] = '0x7'
             res['message'] = 'Username not found.'
         else:
             passcode = hashlib.md5(req_data['password'] + result.salt).hexdigest()
@@ -41,10 +41,10 @@ def sign_in():
                 session['is_login'] = True
                 session['signin_user_name'] = result.username
                 instances = db_session.query(Instance).all()
-                res['code'] = 'ok'
+                res['code'] = '0x1'
                 res['message'] = 'sign in successful'
             else:
-                res['code'] = 'err'
+                res['code'] = '0x6'
                 res['message'] = 'wrong password.'
         return jsonify(**res)
     return render_template('index.html')
@@ -67,10 +67,10 @@ def sign_up():
         if req_email is not None:
             result_mail = db_session.query(User).filter(User.email == req_email).first()
         if result is not None:
-            res['code'] = 'err'
+            res['code'] = '0x4'
             res['message'] = 'Username have been occupied by others'
         elif req_email is not None and result_mail is not None:
-            res['code'] = 'err'
+            res['code'] = '0x5'
             res['message'] = 'Email has been occupied by others'
         else:
             timestamp = str(time.time()) + str(random.randint(10000, 20000))
@@ -80,7 +80,7 @@ def sign_up():
                 salt=salt, create_time=datetime.datetime.now(), update_time=datetime.datetime.now())
             db_session.add(u)
             db_session.commit()
-            res['code'] = 'ok'
+            res['code'] = '0x1'
             res['message'] = 'sign up successful'
         return jsonify(**res)
     return render_template('index.html')

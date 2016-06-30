@@ -41,9 +41,8 @@ angular.module("app.controllers", [ ])
                     });
 
                     $http.post(url, parameter).success(function(data){
-                        if(data.code == 'ok'){
-                            $scope.instances.push(data.instance);
-                        }
+                        console.log(data);
+                        $scope.instances.push(data.instance);
                         $scope.popup = data.message;
                     }).error(function(data){
                         $scope.popup = data.message;
@@ -61,14 +60,22 @@ angular.module("app.controllers", [ ])
                     });
 
                     $http.post(url, parameter).success(function(data){
-                        console.log(data)
-                        for(var i=0; i<$scope.instances.length; ++i){
-                            if($scope.instances[i].container_serial == data.container_serial){
-                                $scope.instances[i].status = 2;
-                                break;
+                        
+                        if(data.code == "0x1"){
+                            for(var i=0; i<$scope.instances.length; ++i){
+                                if($scope.instances[i].container_serial == data.container_serial){
+                                    $scope.instances[i].status = 2;
+                                    $scope.instances[i].host="-";
+                                    $scope.instances[i].port="-";
+                                    break;
+                                }
                             }
+                            $scope.popup = data.message;
+                        }else if(data.code == "0x3"){
+                            $scope.popup = "api error";
+                        }else{
+                            $scope.popup = "unknown error";
                         }
-                        $scope.popup = data.message;
                     }).error(function(data){
                         $scope.popup = data.message;
                     });
@@ -85,13 +92,20 @@ angular.module("app.controllers", [ ])
                     });
 
                     $http.post(url, parameter).success(function(data){
-                         for(var i=0; i<$scope.instances.length; ++i){
-                            if($scope.instances[i].container_serial == data.container_serial){
-                                $scope.instances.splice(i, i);
-                                break;
+                        if(data.code == "0x1"){
+                            for(var i=0; i<$scope.instances.length; ++i){
+                                if($scope.instances[i].container_serial == data.container_serial){
+                                    $scope.instances.splice(i, 1);
+                                    break;
+                                }
                             }
+                            $scope.popup = data.message;
+                        }else if(data.code == "0x3"){
+                            $scope.popup = "api error";
+                        }else{
+                            $scope.popup = "unknown error";
                         }
-                        $scope.popup = data.message;
+
                     }).error(function(data){
                         $scope.popup = data.message;
                     });
@@ -108,7 +122,7 @@ angular.module("app.controllers", [ ])
                     password: $scope.password
                 });
             	$http.post(url, parameter).success(function(data){
-                    if(data.code == 'ok'){
+                    if(data.code == "0x1"){
                         $window.location.href = '#/';
                     }else{
                         $scope.popup = data.message;
@@ -124,7 +138,7 @@ angular.module("app.controllers", [ ])
                 var url = "/signup"
                 var parameter = JSON.stringify({username:$scope.username, password:$scope.password, email:$scope.email});
                 $http.post(url, parameter).success(function(data){
-                    if(data.code == 'ok'){
+                    if(data.code == "0x1"){
                         $window.location.href = '#/';
                     }else{
                         $scope.popup=data.message;
