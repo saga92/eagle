@@ -47,6 +47,7 @@ def create_container(cli, *args, **kwargs):
         res['ins']['user_id'] = user_id
         res['ins']['host'] = ''
         res['ins']['port'] = 0
+        res['ins']['jump_server'] = ''
         res['ins']['container_name'] = kwargs.get('container_name')
         res['ins']['image_name'] = image_name
         res['ins']['status'] = worker_cfg.FAILED_INSTANCE
@@ -63,6 +64,7 @@ def create_container(cli, *args, **kwargs):
         res['ins']['container_name'] = kwargs.get('container_name')
         res['ins']['image_name'] = image_name
         res['ins']['status'] = worker_cfg.STOP_INSTANCE
+        res['ins']['jump_server'] = worker_cfg.DEPLOY_HOSTNAME
         worker_logger.info("succeed to write %s in database." % kwargs.get('container_name'))
     create_instance(res['ins'])
     return json.dumps(res)
@@ -91,6 +93,7 @@ def run_container(cli, *args, **kwargs):
         res['ins']['port'] = port
         res['ins']['user_name'] = kwargs.get('user_name')
         res['ins']['status'] = worker_cfg.RUNNING_INSTANCE
+        res['ins']['jump_server'] = worker_cfg.DEPLOY_HOSTNAME
         worker_logger.info("succeed to start %s." % kwargs.get('container_name'))
     else:
         res['ins']['container_serial'] = kwargs.get('container_serial')

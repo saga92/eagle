@@ -21,7 +21,6 @@ def list_instance():
     if user_query_result is not None:
         instances = db_session.query(Instance, Image).\
                 join(Image, Instance.image_id == Image.id).filter(Instance.user_id == user_query_result.id).all()
-    print instances
     ins_list = []
     for ins, img in instances:
         ins_item = {}
@@ -32,6 +31,7 @@ def list_instance():
         ins_item['host'] = ins.host
         ins_item['port'] = ins.port
         ins_item['status'] = ins.status
+        ins_item['jump_server'] = ins.jump_server
         ins_list.append(ins_item)
     ui_logger.info('len(instances) == %s' % str(len(instances)))
     res['code'] = 'ok'
