@@ -166,10 +166,10 @@
                                           <i>{{instance.instance_status}}</i>
                                       </td>
                                       <td>
-                                        <button ng-show="{{instance.instance_status}}"> 
+                                        <button ng-show="instance.instance_status"> 
                                         <i class="fa fa-pause" aria-hidden="true" ng-click="stopIns(instance.container_serial)"></i>
                                         </button>
-                                        <button ng-hide="{{instance.instance_status}}"> 
+                                        <button ng-hide="instance.instance_status"> 
                                         <i class="fa fa-play" aria-hidden="true"  ng-click="restartIns(instance.container_serial)"></i>
                                         </button>
                                         <button> 
