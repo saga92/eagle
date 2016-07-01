@@ -6,15 +6,12 @@ import mock
 from tests import test_cfg
 from model import User, Instance
 from view import request
-from eagle import app
-
 
 class UnitTest(unittest.TestCase):
 
 
     def setUp(self):
         app.config['TESTING'] = True
-        self.app = app.test_client()
 
     def tearDown(self):
         pass
