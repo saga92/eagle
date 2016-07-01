@@ -41,30 +41,6 @@ angular.module("app.controllers", [ ])
                 });
             });
 
-            $scope.createIns=function(){
-                Session.get("signin_user_name", function(res){
-                    var signInUsername = res;
-                    var url = "/create_ins";
-                    var parameter = JSON.stringify({
-                        image_id: $scope.selectedImage.id,
-                        container_name: $scope.containerName,
-                        user_name: signInUsername
-                    });
-
-                    $http.post(url, parameter).success(function(data){
-                        data.instance.instance_status=true;
-                        if(data.code == 'ok'){
-                            $scope.instances.push(data.instance);
-                        }
-                        console.log(data);
-                        $scope.instances.push(data.instance);
-                        $scope.popup = data.message;
-                    }).error(function(data){
-                        $scope.popup = data.message;
-                    });
-                });
-            };
-
              $scope.createIns=function(){
                 Session.get("signin_user_name", function(res){
                     var signInUsername = res;
@@ -133,8 +109,6 @@ angular.module("app.controllers", [ ])
                                 if($scope.instances[i].container_serial == data.container_serial){
                                     $scope.instances[i].status = 2;
                                     $scope.instances[i].instance_status = true;
-                                    $scope.instances[i].host="-";
-                                    $scope.instances[i].port="-";
                                     break;
                                 }
                             }
