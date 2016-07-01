@@ -47,4 +47,4 @@ if worker_logger is None:
     worker_logger = get_logger('worker')
 
 if __name__ == '__main__':
-    eagle_logger.debug('this is a log for test reason')
+    eagle_logger.error('this is a log for test reason')

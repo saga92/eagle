@@ -144,6 +144,7 @@
                                       <th>vm serial</th> 
                                       <th>vm name</th>
                                       <th>image name</th>
+                                      <th>jump server</th>
                                       <th>host</th>
                                       <th>port</th>
                                       <th>status</th>
@@ -152,25 +153,26 @@
 
                                     <tr ng-repeat="instance in instances">
                                       <td>{{$index + 1}}</td>
-                                      <td>{{instance.container_serial | limitTo : 10}}</td>
+                                      <td>{{instance.container_serial | limitTo : 10 | filterSerial}}</td>
                                       <td>{{instance.container_name}}</td>
                                       <td>{{instance.image_name}}</td> 
-                                      <td>{{instance.host}}</td>
-                                      <td>{{instance.port}}</td>
+                                      <td>{{instance.jump_server | filterJump}}</td>
+                                      <td>{{instance.host | filterHost}}</td>
+                                      <td>{{instance.port | filterPort}}</td>
                                       <td>
-                                        <span class="label label-{{instance.status | filterLabelStat}}">
+                                        <span class="label label-{{instance.status | filterLabelStat}} stat">
                                            {{instance.status | filterStat}}
                                         </span>
                                       </td>
                                       <td>
-                                        <button ng-show="instance.instance_status"> 
-                                        <i class="fa fa-pause" aria-hidden="true" ng-click="stopIns(instance.container_serial)"></i>
+                                         <button ng-show="instance.instance_status" class="btn btn-default btn-sm" ng-click="stopIns(instance.container_serial)" ng-disabled="{{instance.status == 3}}"> 
+                                            <i class="fa fa-pause fa-lg" aria-hidden="true"  ></i>
                                         </button>
-                                        <button ng-hide="instance.instance_status"> 
-                                        <i class="fa fa-play" aria-hidden="true"  ng-click="restartIns(instance.container_serial)"></i>
+                                        <button ng-hide="instance.instance_status" class="btn btn-default btn-sm" ng-click="restartIns(instance.container_serial)" ng-disabled="{{instance.status == 3}}"> 
+                                            <i class="fa fa-play fa-lg" aria-hidden="true"  ></i>
                                         </button>
-                                        <button> 
-                                        <i class="fa fa-trash" aria-hidden="true" ng-click="rmIns(instance.container_serial)"></i>
+                                        <button class="btn btn-default btn-sm" ng-click="rmIns(instance.container_serial)" ng-disabled="{{instance.status == 3}}"> 
+                                            <i class="fa fa-trash fa-lg" aria-hidden="true" ></i>
                                         </button>
                                       </td>
                                     </tr>

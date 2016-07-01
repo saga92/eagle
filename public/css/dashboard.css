@@ -148,3 +148,7 @@ body {
   margin: 0px;
   padding: 0px;
 }
+
+span.label {
+  font-size: 85%;
+}
