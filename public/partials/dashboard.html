@@ -144,6 +144,7 @@
                                       <th>vm serial</th> 
                                       <th>vm name</th>
                                       <th>image name</th>
+                                      <th>jump server</th>
                                       <th>host</th>
                                       <th>port</th>
                                       <th>status</th>
@@ -155,6 +156,7 @@
                                       <td>{{instance.container_serial | limitTo : 10 | filterSerial}}</td>
                                       <td>{{instance.container_name}}</td>
                                       <td>{{instance.image_name}}</td> 
+                                      <td>{{instance.jump_server | filterJump}}</td>
                                       <td>{{instance.host | filterHost}}</td>
                                       <td>{{instance.port | filterPort}}</td>
                                       <td>

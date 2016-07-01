@@ -27,7 +27,7 @@ def create_instance(ins):
     ins = Instance(ins.get('image_id'),\
             ins.get('user_id'), ins.get('container_name'),\
             ins.get('container_serial'), ins.get('host'), \
-            ins.get('port'), ins.get('status'))
+            ins.get('port'), ins.get('status'), ins.get('jump_server'))
     db_session.add(ins)
     db_session.commit()
 

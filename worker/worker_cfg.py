@@ -10,6 +10,8 @@ IMAGE_DICT = {1: 'eagle-ubuntu:14.04', 2: 'eagle-centos:7', 3: \
 
 UI_HOST = 'http://127.0.0.1:8088'
 
+DEPLOY_HOSTNAME = '127.0.0.1'
+
 CREATE = 1
 STOP = 2
 REMOVE = 3

@@ -34,6 +34,16 @@ angular.module("app.services", [])
   		}
   		return decorateFilter;
 	})
+	.filter('filterJump', function() {
+		function decorateFilter(input) {
+			var jump_server = input;
+			if(input == ''){
+				jump_server = "-"; 
+			}
+    		return jump_server;
+  		}
+  		return decorateFilter;
+	})
 	.filter('filterHost', function() {
 		function decorateFilter(input) {
 			var host = input;
