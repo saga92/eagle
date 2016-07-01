@@ -78,7 +78,6 @@ angular.module("app.controllers", [ ])
                             if($scope.instances[i].container_serial == data.container_serial){
                                 $scope.instances[i].status = 2;
                                 $scope.instances[i].instance_status = false;
-                                 alert(typeof($scope.instances[i].instance_status));
                                 break;
                             }
                         }
