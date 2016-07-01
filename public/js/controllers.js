@@ -17,6 +17,7 @@ angular.module("app.controllers", [ ])
                 {id:3, name:"fedora 23"},
                 {id:4, name:"debian 8"}
             ];
+
             $scope.containerName = "dev-container";
             Session.get("signin_user_name", function(res){
                 var signInUsername = res;
@@ -25,11 +26,21 @@ angular.module("app.controllers", [ ])
                         signin_username: signInUsername
                     }
                 }).success(function(data){
+
+                    for(var i=0; i<data.instances.length; ++i){
+                            //alert(data.instances[i].status);
+                            if(data.instances[i].status == 1){
+                                data.instances[i].instance_status = true;
+                            }else if(data.instances[i].status == 2){
+                                data.instances[i].instance_status = false;
+                                //alert(data.instances[i].instance_status);
+                            }
+                        }
                     $scope.instances = data.instances;
-                    console.log($scope.instances)
+                    console.log($scope.instances);
                 });
             });
-            
+
             $scope.createIns=function(){
                 Session.get("signin_user_name", function(res){
                     var signInUsername = res;
@@ -41,6 +52,7 @@ angular.module("app.controllers", [ ])
                     });
 
                     $http.post(url, parameter).success(function(data){
+                        data.instance.instance_status=true;
                         if(data.code == 'ok'){
                             $scope.instances.push(data.instance);
                         }
@@ -61,10 +73,12 @@ angular.module("app.controllers", [ ])
                     });
 
                     $http.post(url, parameter).success(function(data){
-                        console.log(data)
+                        console.log(data);
                         for(var i=0; i<$scope.instances.length; ++i){
                             if($scope.instances[i].container_serial == data.container_serial){
                                 $scope.instances[i].status = 2;
+                                $scope.instances[i].instance_status = false;
+                                 alert(typeof($scope.instances[i].instance_status));
                                 break;
                             }
                         }
@@ -74,6 +88,32 @@ angular.module("app.controllers", [ ])
                     });
                 });
             };
+
+            $scope.restartIns = function(containerSerial){
+                Session.get("signin_user_name", function(res){
+                    var signInUsername = res;
+                    var url = "/restart_ins";
+                    var parameter = JSON.stringify({
+                        container_serial: containerSerial,
+                        user_name: signInUsername
+                    });
+
+                    $http.post(url, parameter).success(function(data){
+                        console.log(data);
+                        for(var i=0; i<$scope.instances.length; ++i){
+                            if($scope.instances[i].container_serial == data.container_serial){
+                                $scope.instances[i].status = 1;
+                                $scope.instances[i].instance_status = true;
+                                break;
+                            }
+                        }
+                        $scope.popup = data.message;
+                    }).error(function(data){
+                        $scope.popup = data.message;
+                    });
+                });
+            };
+
 
             $scope.rmIns = function(containerSerial){
                 Session.get("signin_user_name", function(res){
