@@ -34,7 +34,7 @@ def list_instance():
         ins_item['jump_server'] = ins.jump_server
         ins_list.append(ins_item)
     ui_logger.info('len(instances) == %s' % str(len(instances)))
-    res['code'] = 'ok'
+    res['code'] = '0x1'
     res['instances'] = ins_list
     return jsonify(**res)
 
@@ -63,7 +63,7 @@ def create_instance():
             eagle_logger.info(res['message'])
             eagle_logger.info('db add instance commit!')
         else:
-            res['code'] = 'err'
+            res['code'] = '0x8'
             res['message'] = 'container name occupied.'
             eagle_logger.info('container name occupied.')
     return jsonify(**res)
@@ -91,7 +91,7 @@ def stop_instance():
             res['container_serial'] = worker_res_dict['container_serial']
             eagle_logger.info(res['message'])
         else:
-            res['code'] = 'err'
+            res['code'] = '0x9'
             res['message'] = 'container not exist'
     return jsonify(**res)
 
@@ -116,7 +116,7 @@ def restart_instance():
             res = worker_res_dict
             eagle_logger.info(res['message'])
         else:
-            res['code'] = 'err'
+            res['code'] = '0x9'
             res['message'] = 'container not exist'
     return jsonify(**res)
 
@@ -142,7 +142,7 @@ def remove_instance():
             res['container_serial'] = worker_res_dict['container_serial']
             eagle_logger.info(res['message'])
         else:
-            res['code'] = 'err'
+            res['code'] = '0x9'
             res['message'] = 'container not exist'
     return jsonify(**res)
 

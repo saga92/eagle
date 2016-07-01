@@ -2,15 +2,14 @@
 # -*- coding: utf-8 -*-
 
 ##db configuration
-DB_USERNAME = 'root'
-DB_PASSWORD = 'root'
-
 DB_HOST = '127.0.0.1'
 DB_PORT = '3306'
 DB_NAME = 'eagle'
+DB_USERNAME = 'root'
+DB_PASSWORD = 'root'
 
 ##mq configuration
-MQ_HOST = '172.17.0.3'
+MQ_HOST = '127.0.0.1'
 MQ_PORT = 5672
 MQ_USERNAME = 'root'
 MQ_PASSWORD = 'root'

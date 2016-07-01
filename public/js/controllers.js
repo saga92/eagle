@@ -105,10 +105,13 @@ angular.module("app.controllers", [ ])
 
                     $http.post(url, parameter).success(function(data){
                         if(data.code == "0x1"){
+                            console.log(data);
                             for(var i=0; i<$scope.instances.length; ++i){
                                 if($scope.instances[i].container_serial == data.container_serial){
-                                    $scope.instances[i].status = 2;
+                                    $scope.instances[i].status = 1;
                                     $scope.instances[i].instance_status = true;
+                                    $scope.instances[i].host = data.host;
+                                    $scope.instances[i].port = data.port;
                                     break;
                                 }
                             }

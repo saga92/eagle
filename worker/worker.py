@@ -6,7 +6,6 @@ from utils import WorkerQueue
 from utils import worker_logger
 from utils import db
 from model import Instance, User, Image
-import requests
 import worker_cfg
 from dao import *
 import docker
@@ -146,6 +145,8 @@ def restart_container(cli, *args, **kwargs):
             inspect_res = cli.inspect_container(kwargs.get('container_serial'))
             host = inspect_res["NetworkSettings"]["IPAddress"]
             port = 22
+            res['host'] = host
+            res['port'] = port
             update_col_by_serial(kwargs.get('container_serial'), status=worker_cfg.RUNNING_INSTANCE,\
                     host=host, port=port)
             worker_logger.info("succeed to restart %s." % kwargs.get('container_name'))
