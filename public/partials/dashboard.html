@@ -165,11 +165,14 @@
                                         </span>
                                       </td>
                                       <td>
-                                        <button class="btn btn-default btn-sm" ng-click="stopIns(instance.container_serial)" ng-disabled="{{instance.status == 3}}"> 
-                                        <i class="fa fa-pause fa-lg" aria-hidden="true"  ></i>
+                                         <button ng-show="instance.instance_status" class="btn btn-default btn-sm" ng-click="stopIns(instance.container_serial)" ng-disabled="{{instance.status == 3}}"> 
+                                            <i class="fa fa-pause fa-lg" aria-hidden="true"  ></i>
+                                        </button>
+                                        <button ng-hide="instance.instance_status" class="btn btn-default btn-sm" ng-click="restartIns(instance.container_serial)" ng-disabled="{{instance.status == 3}}"> 
+                                            <i class="fa fa-play fa-lg" aria-hidden="true"  ></i>
                                         </button>
                                         <button class="btn btn-default btn-sm" ng-click="rmIns(instance.container_serial)" ng-disabled="{{instance.status == 3}}"> 
-                                        <i class="fa fa-trash fa-lg" aria-hidden="true" ></i>
+                                            <i class="fa fa-trash fa-lg" aria-hidden="true" ></i>
                                         </button>
                                       </td>
                                     </tr>
