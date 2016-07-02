@@ -229,3 +229,7 @@ ul.alert-dropdown {
 span.label {
   font-size: 85%;
 }
+
+#popup{
+    display: none;
+}

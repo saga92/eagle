@@ -115,11 +115,6 @@
                     <h1 class="page-header">
                         Dashboard <small>Statistics Overview</small>
                     </h1>
-                    <ol class="breadcrumb">
-                        <li class="active">
-                            <i class="fa fa-dashboard"></i> Dashboard
-                        </li>
-                    </ol>
                 </div>
             </div>
             <!-- /.row -->
@@ -128,8 +123,11 @@
                     <div class="panel">
                         <div>
                               <div ng-controller="showDashboard">
-                                  <div>tips: {{ popup }}</div>
-                                  <label class="control-label">Create your container:</label>
+                                    <div id="popup" class="alert alert-{{popupstatus}} alert-dismissible" role="alert">
+                                        <button type="button" class="close" aria-label="Close" ng-click="closeAlert()"><span aria-hidden="true">&times;</span></button>
+                                        <strong>{{ popHead }}</strong> {{ popup }}
+                                    </div>
+                                  <h3>Create your container:</h3>
                                   <form class="form-inline">
                                       <select class="form-control" ng-model="selectedImage" ng-options="img.name for img in images">
                                       </select>
@@ -137,7 +135,7 @@
                                       <button class="btn btn-primary active" ng-click="createIns()">create</button>
                                       
                                   </form>
-                                  <label class="control-label">Instance dashboard:</label>
+                                  <h3>Instance dashboard:</h3>
                                   <table class="table table-striped">
                                     <tr>
                                       <th>#</th>
