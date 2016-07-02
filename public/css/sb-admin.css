@@ -225,3 +225,11 @@ ul.alert-dropdown {
 .panel-yellow > a:hover {
     color: #df8a13;
 }
+
+span.label {
+  font-size: 85%;
+}
+
+#popup{
+    display: none;
+}

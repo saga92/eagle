@@ -16,7 +16,59 @@ angular.module("app.services", [])
 			if(input == 1){
 				stat = "running"; 
 			}else if(input == 2){
-				stat = "stopped"
+				stat = "stopped";
+			}else if(input == 3){
+				stat = "failed";
+			}
+    		return stat;
+  		}
+  		return decorateFilter;
+	})
+	.filter('filterSerial', function() {
+		function decorateFilter(input) {
+			var serial = input;
+			if(input == ''){
+				serial = "-"; 
+			}
+    		return serial;
+  		}
+  		return decorateFilter;
+	})
+	.filter('filterJump', function() {
+		function decorateFilter(input) {
+			var jump_server = input;
+			if(input == ''){
+				jump_server = "-"; 
+			}
+    		return jump_server;
+  		}
+  		return decorateFilter;
+	})
+	.filter('filterHost', function() {
+		function decorateFilter(input) {
+			var host = input;
+			if(input == ''){
+				host = "-"; 
+			}
+    		return host;
+  		}
+  		return decorateFilter;
+	})
+	.filter('filterPort', function() {
+		function decorateFilter(input) {
+			var port = input;
+			if(input == 0){
+				port = "-"; 
+			}
+    		return port;
+  		}
+  		return decorateFilter;
+	})
+	.filter('filterDisabled', function() {
+		function decorateFilter(input) {
+			var stat = "";
+			if(input == 3){
+				stat = "false"; 
 			}
     		return stat;
   		}
@@ -28,7 +80,9 @@ angular.module("app.services", [])
 			if(input == 1){
 				labelClass = "success"; 
 			}else if(input == 2){
-				labelClass = "default"
+				labelClass = "default";
+			}else if(input == 3){
+				labelClass = "danger";
 			}
     		return labelClass;
   		}

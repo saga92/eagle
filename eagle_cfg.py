@@ -4,9 +4,9 @@
 ##db configuration
 DB_HOST = '172.17.0.2'
 DB_PORT = '3306'
-DB_USERNAME = 'root'
-DB_PASSWORD = 'root123'
 DB_NAME = 'eagle'
+DB_USERNAME = 'root'
+DB_PASSWORD = 'root'
 
 ##mq configuration
 MQ_HOST = '172.17.0.3'
@@ -22,7 +22,12 @@ SQLALCHEMY_TRACK_MODIFICATIONS = True
 LOG_PATH = './'
 
 ##local configuration
-CREATE_INSTANCE = 1
+CREATE = 1
+STOP = 2
+REMOVE = 3
+RESTART = 4
+
+RUNNING_INSTANCE = 1
 STOP_INSTANCE = 2
-REMOVE_INSTANCE = 3
-RESTART_INSTANCE = 4
+FAILED_INSTANCE = 3
+PENDING_INSTANCE = 4
