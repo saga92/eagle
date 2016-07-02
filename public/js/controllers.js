@@ -41,6 +41,10 @@ angular.module("app.controllers", [ ])
                 });
             });
 
+            $scope.closeAlert = function(){
+                $('#popup').hide();
+            }
+
              $scope.createIns=function(){
                 Session.get("signin_user_name", function(res){
                     var signInUsername = res;
@@ -51,13 +55,50 @@ angular.module("app.controllers", [ ])
                         user_name: signInUsername
                     });
 
-                    $http.post(url, parameter).success(function(data){
-                        data.instance.instance_status=true;
-                        console.log(data);
-                        $scope.instances.push(data.instance);
+                    $http.post(url, parameter).success(function(data){                        
                         $scope.popup = data.message;
+                        if(data.code == "0x1"){
+                            $scope.instances.push(data.instance);
+                            data.instance.instance_status=true;
+                            $scope.popupstatus = 'success';
+                            $scope.popHead = "SUCCESS!";
+                        }else if(data.code == "0x8"){
+                            $scope.popupstatus = 'danger';
+                            $scope.popHead = "Ops!! FAIL";
+                        }else{
+                            $scope.popupstatus = 'danger';
+                            $scope.popHead = "Ops!! FAIL";
+                            $scope.popup = "It seems something bad occur";
+                        }
+
+                        $("#popup").fadeTo(500, 1).slideDown(500, function(){
+                            $(this).show(); 
+                        });
+                        
+                        window.setTimeout(function() {
+                            if($('#popup').is(':visible')){
+                                $("#popup").fadeTo(500, 0).slideUp(500, function(){
+                                    $(this).hide(); 
+                                });
+                            }
+                        }, 3000);
+                        
+                        
                     }).error(function(data){
                         $scope.popup = data.message;
+                        $scope.popupstatus = 'danger';
+                        $scope.popHead = "Ops!! FAIL";
+
+                        $("#popup").fadeTo(500, 1).slideDown(500, function(){
+                            $(this).show(); 
+                        });
+                        
+                        window.setTimeout(function() {
+                            $("#popup").fadeTo(500, 0).slideUp(500, function(){
+                                $(this).hide(); 
+                            });
+                        }, 3000);
+
                     });
                 });
             };
@@ -83,13 +124,41 @@ angular.module("app.controllers", [ ])
                                 }
                             }
                             $scope.popup = data.message;
+                            $scope.popupstatus = 'success';
+                            $scope.popHead = "SUCCESS!";
                         }else if(data.code == "0x3"){
                             $scope.popup = "api error";
+                            $scope.popupstatus = 'danger';
+                            $scope.popHead = "Ops!! FAIL";
                         }else{
                             $scope.popup = "unknown error";
+                            $scope.popupstatus = 'danger';
+                            $scope.popHead = "Ops!! FAIL";
                         }
+
+                        $("#popup").fadeTo(500, 1).slideDown(500, function(){
+                            $(this).show(); 
+                        });
+                        
+                        window.setTimeout(function() {
+                            $("#popup").fadeTo(500, 0).slideUp(500, function(){
+                                $(this).hide(); 
+                            });
+                        }, 3000);
+
                     }).error(function(data){
                         $scope.popup = data.message;
+                        $scope.popupstatus = 'danger';
+                        $scope.popHead = "Ops!! FAIL";
+                        $("#popup").fadeTo(500, 1).slideDown(500, function(){
+                            $(this).show(); 
+                        });
+                        
+                        window.setTimeout(function() {
+                            $("#popup").fadeTo(500, 0).slideUp(500, function(){
+                                $(this).hide(); 
+                            });
+                        }, 3000);
                     });
                 });
             };
@@ -116,13 +185,39 @@ angular.module("app.controllers", [ ])
                                 }
                             }
                             $scope.popup = data.message;
+                            $scope.popupstatus = 'success';
+                            $scope.popHead = "SUCCESS!";
                         }else if(data.code == "0x3"){
                             $scope.popup = "api error";
+                            $scope.popupstatus = 'danger';
+                            $scope.popHead = "Ops!! FAIL";
                         }else{
                             $scope.popup = "unknown error";
+                            $scope.popupstatus = 'danger';
+                            $scope.popHead = "Ops!! FAIL";
                         }
+                        $("#popup").fadeTo(500, 1).slideDown(500, function(){
+                            $(this).show(); 
+                        });
+                        
+                        window.setTimeout(function() {
+                            $("#popup").fadeTo(500, 0).slideUp(500, function(){
+                                $(this).hide(); 
+                            });
+                        }, 3000);
                     }).error(function(data){
                         $scope.popup = data.message;
+                        $scope.popupstatus = 'danger';
+                        $scope.popHead = "Ops!! FAIL";
+                        $("#popup").fadeTo(500, 1).slideDown(500, function(){
+                            $(this).show(); 
+                        });
+                        
+                        window.setTimeout(function() {
+                            $("#popup").fadeTo(500, 0).slideUp(500, function(){
+                                $(this).hide(); 
+                            });
+                        }, 3000);
                     });
                 });
             };
@@ -146,14 +241,40 @@ angular.module("app.controllers", [ ])
                                 }
                             }
                             $scope.popup = data.message;
+                            $scope.popupstatus = 'success';
+                            $scope.popHead = "SUCCESS!";
                         }else if(data.code == "0x3"){
                             $scope.popup = "api error";
+                            $scope.popupstatus = 'danger';
+                            $scope.popHead = "Ops!! FAIL";
                         }else{
                             $scope.popup = "unknown error";
+                            $scope.popupstatus = 'danger';
+                            $scope.popHead = "Ops!! FAIL";
                         }
+                        $("#popup").fadeTo(500, 1).slideDown(500, function(){
+                            $(this).show(); 
+                        });
+                        
+                        window.setTimeout(function() {
+                            $("#popup").fadeTo(500, 0).slideUp(500, function(){
+                                $(this).hide(); 
+                            });
+                        }, 3000);
 
                     }).error(function(data){
                         $scope.popup = data.message;
+                        $scope.popupstatus = 'danger';
+                        $scope.popHead = "Ops!! FAIL";
+                        $("#popup").fadeTo(500, 1).slideDown(500, function(){
+                            $(this).show(); 
+                        });
+                        
+                        window.setTimeout(function() {
+                            $("#popup").fadeTo(500, 0).slideUp(500, function(){
+                                $(this).hide(); 
+                            });
+                        }, 3000);
                     });
                 });
             };
