@@ -5,6 +5,7 @@ import unittest
 
 from base import Test
 from tests import test_cfg
+from tests.test_util import *
 from view import *
 
 
@@ -19,7 +20,7 @@ class TestUser(Test):
         )
         response = self.app.post('/signup', data=json.dumps(req), follow_redirects=True)
         res_dict = json.loads(response.data)
-        self.assertEquals(res_dict.get('code'), 'ok')
+        self.assertEquals(res_dict.get('code'), '0x1')
 
     # Email address is occupied by others
     def test_2_signup_email_failed(self):
@@ -30,7 +31,7 @@ class TestUser(Test):
         )
         response = self.app.post('/signup', data=json.dumps(req), follow_redirects=True)
         res_dict = json.loads(response.data)
-        self.assertEquals(res_dict.get('message'), 'Email has been occupied by others')
+        self.assertEquals(res_dict.get('code'), '0x5')
 
     # User name is occupied by others
     def test_3_signup_name_failed(self):
@@ -41,7 +42,7 @@ class TestUser(Test):
         )
         response = self.app.post('/signup', data=json.dumps(req), follow_redirects=True)
         res_dict = json.loads(response.data)
-        self.assertEquals(res_dict.get('message'), 'Username have been occupied by others')
+        self.assertEquals(res_dict.get('code'), '0x4')
 
     # Test sigin with user name
     def test_4_signin_with_name_success(self):
@@ -51,7 +52,7 @@ class TestUser(Test):
         )
         response = self.app.post('/signin', data=json.dumps(req), follow_redirects=True)
         res_dict = json.loads(response.data)
-        self.assertEquals(res_dict.get('code'), 'ok')
+        self.assertEquals(res_dict.get('code'), '0x1')
 
     # Test sigin in with email
     def test_5_signin_with_email_success(self):
@@ -61,7 +62,7 @@ class TestUser(Test):
         )
         response = self.app.post('/signin', data=json.dumps(req), follow_redirects=True)
         res_dict = json.loads(response.data)
-        self.assertEquals(res_dict.get('code'), 'ok')
+        self.assertEquals(res_dict.get('code'), '0x1')
 
     # User name doesn't exist
     def test_6_signin_name_failed(self):
@@ -71,7 +72,7 @@ class TestUser(Test):
         )
         response = self.app.post('/signin', data=json.dumps(req), follow_redirects=True)
         res_dict = json.loads(response.data)
-        self.assertEquals(res_dict.get('message'), 'Username not found.')
+        self.assertEquals(res_dict.get('code'), '0x7')
 
     # Password is wrong
     def test_7_sigin_password_failed(self):
@@ -81,7 +82,7 @@ class TestUser(Test):
         )
         response = self.app.post('/signin', data=json.dumps(req), follow_redirects=True)
         res_dict = json.loads(response.data)
-        self.assertEquals(res_dict.get('message'), 'wrong password.')
+        self.assertEquals(res_dict.get('code'), '0x6')
 
     def test_8_signout(self):
         response = self.app.get('/signout', follow_redirects=True)
