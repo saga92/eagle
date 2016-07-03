@@ -196,6 +196,5 @@ class TestInstance(UnitTest):
             res_dict = json.loads(response.data)
             self.assertEqual(res_dict.get('code'), '0x9')
 
-
 if __name__ == '__main__':
     unittest.main()

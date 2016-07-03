@@ -69,4 +69,3 @@ def remove_user_by_username(username):
     db_session.delete(user_query_res)
     db_session.commit()
     return user_name
-
