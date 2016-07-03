@@ -11,13 +11,16 @@ addons:
     apt:
         packages:
             - mysql-server
+            - python-pip
 env:
     DB_HOST: 127.0.0.1
     DB_PORT: 3306
     DB_USER: root
     DB_WD: 
 
-install: "pip install -r requirements.txt"
+install: 
+    - "pip install pip --upgrade"
+    - "pip install -r requirements.txt"
 
 before_script:
     #create tables
