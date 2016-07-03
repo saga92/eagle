@@ -1,7 +1,7 @@
 Flask
 Flask-SQLAlchemy
 mysql-python
-pika
+pika>=0.10.0
 docker-py
-requests
+requests>=2.4.3
 mock>=2.0
