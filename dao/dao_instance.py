@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from utils import db
-from model import Instance, User
-import worker_cfg
+from model import Instance
 
 def update_col_by_serial(container_serial, **kwargs):
     db_session = db.Session()
@@ -38,3 +37,8 @@ def remove_instance_by_serial(container_serial):
     db_session.delete(instance_query_res)
     db_session.commit()
     return container_name
+
+def get_instance_by_serial(container_serial):
+    db_session = db.Session()
+    instance_query_res = db_session.query(Instance).filter(Instance.container_serial == container_serial).first()
+    return instance_query_res

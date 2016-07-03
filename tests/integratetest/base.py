@@ -6,17 +6,14 @@ import random
 import string
 import unittest
 
-from eagle import app
 from utils import eagle_logger
 
 
 
-class Test(unittest.TestCase):
+class IntegrateTest(unittest.TestCase):
 
     def setUp(self):
         eagle_logger.disabled = True
-        app.config['TESTING'] = True
-        self.app = app.test_client()
 
     def tearDown(self):
         pass
