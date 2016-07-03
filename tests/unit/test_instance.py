@@ -7,7 +7,6 @@ import json
 
 from base import UnitTest
 from tests import test_cfg
-from utils import UiQueue
 from view.instance import *
 from eagle import app
 from dao import *
