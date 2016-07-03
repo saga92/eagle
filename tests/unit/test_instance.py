@@ -95,7 +95,8 @@ class TestInstance(UnitTest):
             container_serial=self.ins.get('container_serial'),
             user_name=test_cfg.USER_NAME
         )
-        with mock.patch.object(UiQueue, 'send') as mock_queue_send:
+        with mock.patch.object(UiQueue, 'send'
+                               ) as mock_queue_send:
             worker_res = dict(
                 code='0x1',
                 message='pass',
@@ -114,7 +115,8 @@ class TestInstance(UnitTest):
             container_serial=self.ins.get('container_serial'),
             user_name=test_cfg.USER_NAME
         )
-        with mock.patch.object(UiQueue, 'send') as mock_queue_send:
+        with mock.patch.object(UiQueue, 'send'
+                               ) as mock_queue_send:
             worker_res = dict(
                 code='0x1',
                 message='pass',
@@ -131,7 +133,8 @@ class TestInstance(UnitTest):
             container_serial=self.ins.get('container_serial'),
             user_name=test_cfg.USER_NAME
         )
-        with mock.patch.object(UiQueue, 'send') as mock_queue_send:
+        with mock.patch.object(UiQueue, 'send'
+                               ) as mock_queue_send:
             worker_res = dict(
                 code='0x1',
                 message='pass',
@@ -150,7 +153,8 @@ class TestInstance(UnitTest):
             container_serial=self.ins.get('container_serial'),
             user_name=test_cfg.USER_NAME
         )
-        with mock.patch.object(UiQueue, 'send') as mock_queue_send:
+        with mock.patch.object(UiQueue, 'send'
+                               ) as mock_queue_send:
             worker_res = dict(
                 code='0x1',
                 message='pass',
@@ -167,7 +171,8 @@ class TestInstance(UnitTest):
             container_serial=self.ins.get('container_serial'),
             user_name=test_cfg.USER_NAME
         )
-        with mock.patch.object(UiQueue, 'send') as mock_queue_send:
+        with mock.patch.object(UiQueue, 'send'
+                               ) as mock_queue_send:
             worker_res = dict(
                 code='0x1',
                 message='pass',
@@ -185,7 +190,8 @@ class TestInstance(UnitTest):
             container_serial=self.ins.get('container_serial'),
             user_name=test_cfg.USER_NAME
         )
-        with mock.patch.object(UiQueue, 'send') as mock_queue_send:
+        with mock.patch.object(UiQueue, 'send'
+                               ) as mock_queue_send:
             worker_res = dict(
                 code='0x1',
                 message='pass',
