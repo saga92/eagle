@@ -23,7 +23,7 @@ install:
 
 before_script:
     #create tables
-    - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root')\
+    - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root')
             WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
     - mysql < ./schema.sql -uroot -proot --verbose
 
