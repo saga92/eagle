@@ -19,7 +19,7 @@ env:
     DB_WD: 
 
 install: 
-    - "pip install pip --upgrade"
+    - "pip install pip==1.5.6"
     - "pip install -r requirements.txt"
 
 before_script:
