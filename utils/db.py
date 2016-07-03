@@ -23,9 +23,13 @@ from sqlalchemy.orm import sessionmaker
 
 app_conf = imp.load_source('app_conf', os.getenv('EAGLE_HOME', '..') + '/eagle_cfg.py')
 
+#SQLALCHEMY_DATABASE_URI =\
+#    'mysql://'+app_conf.DB_USERNAME + ':' + \
+#    app_conf.DB_PASSWORD + '@' + app_conf.DB_HOST + \
+#    ':'+app_conf.DB_PORT + '/' + app_conf.DB_NAME
+
 SQLALCHEMY_DATABASE_URI =\
-    'mysql://'+app_conf.DB_USERNAME + ':' + \
-    app_conf.DB_PASSWORD + '@' + app_conf.DB_HOST + \
+    'mysql://'+app_conf.DB_USERNAME + '@' + app_conf.DB_HOST + \
     ':'+app_conf.DB_PORT + '/' + app_conf.DB_NAME
 
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
