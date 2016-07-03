@@ -4,3 +4,4 @@ mysql-python
 pika
 docker-py
 requests
+mock

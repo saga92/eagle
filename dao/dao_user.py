@@ -16,6 +16,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import hashlib
 from utils import db
 from model import User
 
@@ -44,3 +45,27 @@ def update_update_time_by_id(id, update_time):
 def update_is_deleted_by_id(id, is_deleted):
     update_user(id, is_deleted=is_deleted)
 
+def create_user(user):
+    db_session = db.Session()
+    password = hashlib.md5(user.get('password') + user.get('salt', '')).hexdigest()
+    user_res = User(user.get('username'), password,
+                    email=user.get('email'), salt=user.get('salt', ''),
+                    create_time=user.get('create_time', '0000-00-00 00:00'),
+                    update_time=user.get('update_time', '0000-00-00 00:00'),
+                    is_deleted=user.get('is_deleted', 0)
+                    )
+    db_session.add(user_res)
+    db_session.commit()
+
+def get_user_by_username(username):
+    db_session = db.Session()
+    user_query_res = db_session.query(User).filter(User.username == username).first()
+    return user_query_res
+
+def remove_user_by_username(username):
+    db_session = db.Session()
+    user_query_res = db_session.query(User).filter(User.username == username).first()
+    user_name = user_query_res.username
+    db_session.delete(user_query_res)
+    db_session.commit()
+    return user_name
