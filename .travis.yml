@@ -4,9 +4,9 @@ python:
 
 install: "pip install -r requirements.txt"
 
-script: source env.sh
-
-script: python -m unittest discover -v -s ./tests/unit -p "test_*.py"
+script:
+    -source ./env.sh
+    -python -m unittest discover -v -s ./tests/unit -p "test_*.py"
 branches:
   only:
     - master
