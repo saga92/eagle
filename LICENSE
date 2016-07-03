@@ -217,7 +217,6 @@ SECTION 1: BSD-STYLE, MIT-STYLE, OR SIMILAR STYLE LICENSES
 
    >>> angularjs
    >>> bootstrap
-   >>> bootstrap-datepicker
    >>> flask
    >>> font-awesome
    >>> jquery
@@ -232,19 +231,10 @@ SECTION 2: Apache License, V2.0
 
 
 
-SECTION 3: Mozilla Public License, V2.0
-
-   >>> go-sql-driver/mysql-1.2
-
-
-
 APPENDIX. Standard License Files
 
    >>> Apache License, V2.0
 
-   >>> Mozilla Public License, V2.0
-   
-   >>> Creative Commons Attribution License, V3.0
 
 
    
