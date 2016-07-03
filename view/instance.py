@@ -68,9 +68,9 @@ def create_instance():
             policy['container_name'] = req_data['container_name']
             policy['user_name'] = req_data['user_name']
             message = json.dumps(policy)
-            ui_mq = UiQueue()
+            #ui_mq = UiQueue()
             #blocking max time: 60s
-            worker_res = ui_mq.send(message)
+            worker_res = UiQueue().send(message)
             worker_res_dict = json.loads(worker_res)
             res['code'] = worker_res_dict['code']
             res['message'] = worker_res_dict['message']
@@ -98,8 +98,8 @@ def stop_instance():
             policy['container_name'] = instance_query_result.container_name
             policy['user_name'] = req_data['user_name']
             message = json.dumps(policy)
-            ui_mq = UiQueue()
-            worker_res = ui_mq.send(message)
+            #ui_mq = UiQueue()
+            worker_res = UiQueue().send(message)
             worker_res_dict = json.loads(worker_res)
             res['code'] = worker_res_dict['code']
             res['message'] = worker_res_dict['message']
@@ -125,8 +125,8 @@ def restart_instance():
             policy['container_name'] = instance_query_result.container_name
             policy['user_name'] = req_data['user_name']
             message = json.dumps(policy)
-            ui_mq = UiQueue()
-            worker_res = ui_mq.send(message)
+            #ui_mq = UiQueue()
+            worker_res = UiQueue().send(message)
             worker_res_dict = json.loads(worker_res)
             res = worker_res_dict
             eagle_logger.info(res['message'])
@@ -149,8 +149,8 @@ def remove_instance():
             policy['container_serial'] = req_data['container_serial']
             policy['user_name'] = req_data['user_name']
             message = json.dumps(policy)
-            ui_mq = UiQueue()
-            worker_res = ui_mq.send(message)
+            #ui_mq = UiQueue()
+            worker_res = UiQueue().send(message)
             worker_res_dict = json.loads(worker_res)
             res['code'] = worker_res_dict['code']
             res['message'] = worker_res_dict['message']
