@@ -1,8 +1,36 @@
+sudo: true
+
 language: python
+
 python:
   - "2.7"
 
-script: python -m unittest discover -v -s ./tests/unit -p "test_*.py"
+services:
+    - mysql
+addons:
+    apt:
+        packages:
+            - mysql-server
+            - python-pip
+env:
+    DB_HOST: 127.0.0.1
+    DB_PORT: 3306
+    DB_USER: root
+    DB_WD: root
+
+install: 
+    - "pip install -r requirements.txt"
+
+before_script:
+    #Set mysql password for root user
+    - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root')
+            WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+    #Create tables
+    - mysql < ./schema.sql -uroot -proot --verbose
+
+script:
+    - source ./env.sh
+    - python -m unittest discover -v -s ./tests/unit -p "test_*.py"
 branches:
   only:
     - master

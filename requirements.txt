@@ -4,4 +4,4 @@ mysql-python
 pika
 docker-py
 requests
-mock
+mock>=2.0
