@@ -1,7 +1,6 @@
 Flask
-Flask-SQLAlchemy
-mysql-python
+SQLAlchemy
+pg8000
 pika
 docker-py
-requests
 mock>=2.0

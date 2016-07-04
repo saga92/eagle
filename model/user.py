@@ -18,9 +18,10 @@
 
 from . import Base
 from sqlalchemy import Column, Integer, String, DateTime
+from datetime import datetime
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     username = Column(String(128), nullable=False)
     password = Column(String(128), nullable=False)
@@ -35,6 +36,6 @@ class User(Base):
         self.password = password
         self.email = kargs.get('email', '')
         self.salt = kargs.get('salt', '')
-        self.create_time = kargs.get('create_time', '0000-00-00 00:00')
-        self.update_time = kargs.get('update_time', '0000-00-00 00:00')
+        self.create_time = kargs.get('create_time', datetime.utcnow())
+        self.update_time = kargs.get('update_time', datetime.utcnow())
         self.is_deleted = kargs.get('is_deleted', 0)
