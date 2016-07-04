@@ -66,7 +66,6 @@ class TestInstance(UnitTest):
             mock_block.return_value = mock.Mock()
             mock_block_channel.return_value = mock.Mock()
             mock_queue_send.return_value = json.dumps(worker_res)
-
             response = self.app.post('/create_ins', data = json.dumps(req), follow_redirects=True)
             mock_queue_send.assert_called_once()
             res_dict = json.loads(response.data)
