@@ -68,7 +68,7 @@ class TestInstance(UnitTest):
             mock_queue_send.return_value = json.dumps(worker_res)
 
             response = self.app.post('/create_ins', data = json.dumps(req), follow_redirects=True)
-            mock_queue_send.cassert_called_once()
+            mock_queue_send.assert_called_once()
             res_dict = json.loads(response.data)
             self.assertEqual(res_dict.get('code'), '0x1')
 
