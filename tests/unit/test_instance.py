@@ -4,6 +4,7 @@
 import unittest
 import mock
 import json
+import pika
 
 from base import UnitTest
 from tests import test_cfg
@@ -12,7 +13,6 @@ from view.instance import *
 from eagle import app
 from dao import *
 
-container_serial = None
 
 class TestInstance(UnitTest):
 
@@ -55,15 +55,20 @@ class TestInstance(UnitTest):
             image_id=test_cfg.CONTAINER_IMAGE_ID,
             user_name=test_cfg.USER_NAME
         )
-        with mock.patch.object(UiQueue, 'send') as mock_queue_send:
+        with mock.patch('pika.BlockingConnection') as mock_block,\
+            mock.patch.object(pika.BlockingConnection,'channel') as mock_block_channel,\
+            mock.patch.object(UiQueue, 'send') as mock_queue_send:
             worker_res = dict(
                 code='0x1',
                 message='pass',
                 ins={}
             )
+            mock_block.return_value = mock.Mock()
+            mock_block_channel.return_value = mock.Mock()
             mock_queue_send.return_value = json.dumps(worker_res)
+
             response = self.app.post('/create_ins', data = json.dumps(req), follow_redirects=True)
-            mock_queue_send.assert_called_once()
+            mock_queue_send.cassert_called_once()
             res_dict = json.loads(response.data)
             self.assertEqual(res_dict.get('code'), '0x1')
 
@@ -93,12 +98,16 @@ class TestInstance(UnitTest):
             container_serial=self.ins.get('container_serial'),
             user_name=test_cfg.USER_NAME
         )
-        with mock.patch.object(UiQueue, 'send') as mock_queue_send:
+        with mock.patch('pika.BlockingConnection') as mock_block,\
+            mock.patch.object(pika.BlockingConnection,'channel') as mock_block_channel,\
+            mock.patch.object(UiQueue, 'send') as mock_queue_send:
             worker_res = dict(
                 code='0x1',
                 message='pass',
                 container_serial=self.ins.get('container_serial')
             )
+            mock_block.return_value = mock.Mock()
+            mock_block_channel.return_value = mock.Mock()
             mock_queue_send.return_value = json.dumps(worker_res)
             response = self.app.post('/stop_ins', data=json.dumps(req), follow_redirects=True)
             remove_instance_by_serial(self.ins.get('container_serial'))
@@ -129,12 +138,16 @@ class TestInstance(UnitTest):
             container_serial=self.ins.get('container_serial'),
             user_name=test_cfg.USER_NAME
         )
-        with mock.patch.object(UiQueue, 'send') as mock_queue_send:
+        with mock.patch('pika.BlockingConnection') as mock_block,\
+            mock.patch.object(pika.BlockingConnection,'channel') as mock_block_channel,\
+            mock.patch.object(UiQueue, 'send') as mock_queue_send:
             worker_res = dict(
                 code='0x1',
                 message='pass',
                 container_serial=self.ins.get('container_serial')
             )
+            mock_block.return_value = mock.Mock()
+            mock_block_channel.return_value = mock.Mock()
             mock_queue_send.return_value = json.dumps(worker_res)
             response = self.app.post('/restart_ins', data=json.dumps(req), follow_redirects=True)
             remove_instance_by_serial(self.ins.get('container_serial'))
@@ -148,12 +161,16 @@ class TestInstance(UnitTest):
             container_serial=self.ins.get('container_serial'),
             user_name=test_cfg.USER_NAME
         )
-        with mock.patch.object(UiQueue, 'send') as mock_queue_send:
+        with mock.patch('pika.BlockingConnection') as mock_block,\
+            mock.patch.object(pika.BlockingConnection,'channel') as mock_block_channel,\
+            mock.patch.object(UiQueue, 'send') as mock_queue_send:
             worker_res = dict(
                 code='0x1',
                 message='pass',
                 container_serial=self.ins.get('container_serial')
             )
+            mock_block.return_value = mock.Mock()
+            mock_block_channel.return_value = mock.Mock()
             mock_queue_send.return_value = json.dumps(worker_res)
             response = self.app.post('/restart_ins', data=json.dumps(req), follow_redirects=True)
             res_dict = json.loads(response.data)
@@ -165,12 +182,16 @@ class TestInstance(UnitTest):
             container_serial=self.ins.get('container_serial'),
             user_name=test_cfg.USER_NAME
         )
-        with mock.patch.object(UiQueue, 'send') as mock_queue_send:
+        with mock.patch('pika.BlockingConnection') as mock_block,\
+            mock.patch.object(pika.BlockingConnection,'channel') as mock_block_channel,\
+            mock.patch.object(UiQueue, 'send') as mock_queue_send:
             worker_res = dict(
                 code='0x1',
                 message='pass',
                 container_serial=self.ins.get('container_serial')
             )
+            mock_block.return_value = mock.Mock()
+            mock_block_channel.return_value = mock.Mock()
             mock_queue_send.return_value = json.dumps(worker_res)
             response = self.app.post('/remove_ins', data=json.dumps(req), follow_redirects=True)
             remove_instance_by_serial(self.ins.get('container_serial'))
@@ -183,12 +204,16 @@ class TestInstance(UnitTest):
             container_serial=self.ins.get('container_serial'),
             user_name=test_cfg.USER_NAME
         )
-        with mock.patch.object(UiQueue, 'send') as mock_queue_send:
+        with mock.patch('pika.BlockingConnection') as mock_block,\
+            mock.patch.object(pika.BlockingConnection,'channel') as mock_block_channel,\
+            mock.patch.object(UiQueue, 'send') as mock_queue_send:
             worker_res = dict(
                 code='0x1',
                 message='pass',
                 container_serial=self.ins.get('container_serial')
             )
+            mock_block.return_value = mock.Mock()
+            mock_block_channel.return_value = mock.Mock()
             mock_queue_send.return_value = json.dumps(worker_res)
             response = self.app.post('/remove_ins', data=json.dumps(req), follow_redirects=True)
             res_dict = json.loads(response.data)
