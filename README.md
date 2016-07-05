@@ -1,5 +1,7 @@
 # Eagle
 
+[![Build Status](https://travis-ci.org/saga92/eagle.svg?branch=master)](https://travis-ci.org/saga92/eagle)
+
 ## Introduction
 
 Eagle is docker cloud computing solution which aims at the medium and small bussiness or high school situation.
