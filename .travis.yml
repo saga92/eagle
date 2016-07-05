@@ -7,10 +7,10 @@ python:
 
 services:
     - postgresql
+
 addons:
-    apt:
-        packages:
-            - postgresql
+      postgresql: "9.3"
+
 env:
     DB_HOST: 127.0.0.1
     DB_PORT: 5432
@@ -30,6 +30,7 @@ before_script:
 script:
     - source ./env.sh
     - python -m unittest discover -v -s ./tests/unit -p "test_*.py"
+
 branches:
   only:
     - master
