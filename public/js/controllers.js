@@ -37,6 +37,7 @@ angular.module("app.controllers", [ ])
                             }
                         }
                     $scope.instances = data.instances;
+                    $scope.signInUsername = res;
                     console.log($scope.instances);
                 });
             });
@@ -51,7 +52,7 @@ angular.module("app.controllers", [ ])
                     var url = "/create_ins";
                     var parameter = JSON.stringify({
                         image_id: $scope.selectedImage.id,
-                        container_name: $scope.containerName,
+                        container_name: signInUsername + $scope.containerName,
                         user_name: signInUsername
                     });
 
