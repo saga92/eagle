@@ -58,6 +58,9 @@ def create_instance():
     res = {}
     if request.method == 'POST':
         req_data = json.loads(request.data)
+        req_data['container_name'] = '-'.join([
+            req_data['user_name'], req_data['container_name']
+        ])
         db_session = db.Session()
         instance_query_result = db_session.query(Instance).filter(\
             Instance.container_name == req_data['container_name']).first()

@@ -52,7 +52,7 @@ angular.module("app.controllers", [ ])
                     var url = "/create_ins";
                     var parameter = JSON.stringify({
                         image_id: $scope.selectedImage.id,
-                        container_name: signInUsername + '-' + $scope.containerName,
+                        container_name: $scope.containerName,
                         user_name: signInUsername
                     });
 
