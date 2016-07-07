@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/saga92/eagle.svg?branch=master)](https://travis-ci.org/saga92/eagle)
 
-<img src="docs/static_files/logo.png" width = "500"  alt="Eagle" align=center />
+<img src="docs/static_files/logo.png" width = "900"  alt="Eagle" align=center />
 
 ## Introduction
 
