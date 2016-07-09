@@ -71,7 +71,7 @@ def sign_in():
 @app.route('/signout')
 def sign_out():
     session.pop('is_login', None)
-    session.pop('signin_user_name', None)
+    session.pop('user_profile', None)
     return redirect('/')
 
 @app.route('/signup', methods=['GET', 'POST'])

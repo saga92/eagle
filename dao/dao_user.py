@@ -17,7 +17,7 @@
 # -*- coding: utf-8 -*-
 
 import hashlib
-from datetime import datetime
+import datetime
 from utils import db
 from model import User
 
@@ -51,8 +51,8 @@ def create_user(user):
     password = hashlib.md5(user.get('password') + user.get('salt', '')).hexdigest()
     user_res = User(user.get('username'), password,
                     email=user.get('email'), salt=user.get('salt', ''),
-                    create_time=user.get('create_time', datetime.utcnow()),
-                    update_time=user.get('update_time', datetime.utcnow()),
+                    create_time=user.get('create_time', datetime.datetime.utcnow()),
+                    update_time=user.get('update_time', datetime.datetime.utcnow()),
                     is_deleted=user.get('is_deleted', 0)
                     )
     db_session.add(user_res)
