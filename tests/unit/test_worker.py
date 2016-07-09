@@ -63,8 +63,8 @@ class TestWorker(UnitTest):
             mock_cli_create.side_effect = docker.errors.APIError(mock.Mock(), mock.Mock())
             response = worker.create_container(self.cli, **req)
 
-            #The default container_serial is 0
-            remove_instance_by_serial(0)
+            #The default container_serial is ''
+            remove_instance_by_serial('')
             remove_user_by_username(test_cfg.USER_NAME)
             mock_cli_create.assert_called_once()
             res_dict = json.loads(response)

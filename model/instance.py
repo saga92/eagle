@@ -19,9 +19,10 @@
 from . import Base
 
 from sqlalchemy import Column, Integer, String, DateTime
+from datetime import datetime
 
 class Image(Base):
-    __tablename__ = 'image'
+    __tablename__ = 'images'
     id = Column(Integer, primary_key=True)
     image_name = Column(String(128), nullable=False)
     description = Column(String(512), nullable=False)
@@ -31,7 +32,7 @@ class Image(Base):
 
 
 class Instance(Base):
-    __tablename__ = 'instance'
+    __tablename__ = 'instances'
     id = Column(Integer, primary_key=True)
     image_id = Column(Integer, nullable=False)
     user_id = Column(Integer, nullable=False)
@@ -54,6 +55,6 @@ class Instance(Base):
         self.port = port
         self.status = status
         self.jump_server = jump_server
-        self.create_time = kargs.get('create_time', '0000-00-00 00:00')
-        self.update_time = kargs.get('update_time', '0000-00-00 00:00')
+        self.create_time = kargs.get('create_time', datetime.utcnow())
+        self.update_time = kargs.get('update_time', datetime.utcnow())
         self.is_deleted = kargs.get('is_deleted', 0)

@@ -1,5 +1,9 @@
 # Eagle
 
+[![Build Status](https://travis-ci.org/saga92/eagle.svg?branch=master)](https://travis-ci.org/saga92/eagle)
+
+<img src="https://cdn.rawgit.com/saga92/eagle/master/docs/static_files/logo.svg" width = "900"  alt="Eagle" align=center />
+
 ## Introduction
 
 Eagle is docker cloud computing solution which aims at the medium and small bussiness or high school situation.
@@ -7,7 +11,7 @@ Eagle is docker cloud computing solution which aims at the medium and small buss
 It encourages people enhance their workflow by embending Eagle into op system.
 
 It simplify below procedures:
-- Deploy container to replace huge resource killer -- virtual machine
+- Deploy container to replace huge resource killer -- virtual machine.
 - Deploy an-app-a-container and manage your app in a more effecient way.
 
 ## Deploy

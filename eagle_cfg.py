@@ -18,7 +18,7 @@
 
 ##db configuration
 DB_HOST = '127.0.0.1'
-DB_PORT = '3306'
+DB_PORT = '5432'
 DB_NAME = 'eagle'
 DB_USERNAME = 'root'
 DB_PASSWORD = 'root123'
