@@ -55,7 +55,10 @@ def sign_in():
             passcode = hashlib.md5(req_data['password'] + result.salt).hexdigest()
             if result.password == passcode:
                 session['is_login'] = True
-                session['signin_user_name'] = result.username
+                user_profile = {}
+                user_profile['username'] = result.username
+                user_profile['password'] = result.password
+                session['user_profile'] = json.dumps(user_profile)
                 instances = db_session.query(Instance).all()
                 res['code'] = '0x1'
                 res['message'] = 'sign in successful'
@@ -104,13 +107,13 @@ def sign_up():
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     res={};
-    res['code'] = '0x8'
+    res['code'] = '0x1'
     res['message'] = 'modify profile successful'
     if request.methods == 'POST':
         eagle_logger.debug(type(request.data))
         req_data = json.loads(request.data)        
         result = get_user_by_username(req_data['username'])
-        req_id = req_data.get('id', None)
+        req_id = result.get('id', None)
         req_email = req_data.get('email', None)
         if req_email is not None:
             db_session = db.Session()
@@ -122,6 +125,11 @@ def profile():
                 update_email_by_id(req_id, req_email)
         req_password = req_data.get('password', None)
         if req_password is not None:
-            update_password_by_id(req_id, req_password)
+            timestamp = str(time.time()) + str(random.randint(10000, 20000))
+            salt = hashlib.md5(timestamp).hexdigest()
+            passcode = hashlib.md5(req_password + salt).hexdigest()
+            update_password_by_id(req_id, passcode)
+            update_salt_by_id(req_id, salt)
+        update_update_time_by_id(req_id, datetime.datetime.now())
         return jsonify(**res)
     return render_template('index.html')

@@ -319,8 +319,10 @@ angular.module("app.controllers", [ ])
     ])
     .controller("getUsername", ['$scope', 'Session', '$http', '$window',
         function ($scope, Session, $http, $window) {
-            Session.get("signin_user_name", function(res){
-                $scope.signInUsername = res;
+            Session.get("user_profile", function(res){
+                var user_profile = JSON.parse(res);
+                $scope.signInUsername = user_profile.username;
+                $scope.signInPassword = user_profile.password;
             });
         }
     ]);
