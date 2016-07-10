@@ -21,12 +21,15 @@ import datetime
 from utils import db
 from model import User
 
-def update_col_by_id(id, *args, **kwargs):
+def update_user(id, *args, **kwargs):
     db_session = db.Session()
     user_query_res = db_session.query(User).filter(User.id == id).first()
     for key in kwargs:
         setattr(user_query_res, key, kwargs.get(key))
     db_session.commit()
+
+def update_username_by_id(id, username):
+    update_user(id, username=username)
 
 def update_password_by_id(id, password):
     update_user(id, password=password)
@@ -66,6 +69,14 @@ def get_user_by_username(username):
 def remove_user_by_username(username):
     db_session = db.Session()
     user_query_res = db_session.query(User).filter(User.username == username).first()
+    user_name = user_query_res.username
+    db_session.delete(user_query_res)
+    db_session.commit()
+    return user_name
+
+def remove_user_by_id(id):
+    db_session = db.Session()
+    user_query_res = db_session.query(User).filter(User.id == id).first()
     user_name = user_query_res.username
     db_session.delete(user_query_res)
     db_session.commit()

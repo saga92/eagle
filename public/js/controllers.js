@@ -320,6 +320,7 @@ angular.module("app.controllers", [ ])
     .controller("getUsername", ['$scope', 'Session', '$http', '$window',
         function ($scope, Session, $http, $window) {
             Session.get("user_profile", function(res){
+                $scope.signId = res.id;
                 $scope.signInUsername = res.username;
                 $scope.signInPassword = res.password;
             });
