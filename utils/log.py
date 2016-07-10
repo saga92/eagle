@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import logging
-#from logging.handlers import RotatingFileHandler
 from logging.handlers import TimedRotatingFileHandler
 from logging import StreamHandler
 from logging import Formatter
@@ -18,18 +17,7 @@ worker_logger = None
 def get_logger(logger_name):
     app_conf = imp.load_source('app_conf', os.getenv('EAGLE_HOME', '..') + '/eagle_cfg.py')
 
-<<<<<<< HEAD
-formatter = Formatter(
-    '%(asctime)s %(levelname)s: %(message)s '
-    '[in %(pathname)s:%(lineno)d]'
-)
-#handler = RotatingFileHandler(app_conf.LOG_PATH + '/eagle.log', maxBytes=10000000, backupCount=2)
-handler = TimedRotatingFileHandler(app_conf.LOG_PATH + '/eagle.log', when="midnight")
-handler.suffix = "%Y-%m-%d"
-handler.setFormatter(formatter)
-=======
     _logger = logging.getLogger(logger_name)
->>>>>>> eagle/master
 
     file_formatter = Formatter(
         '%(levelname)s | %(asctime)s | %(name)s | %(message)s | %(pathname)s:%(lineno)d'
