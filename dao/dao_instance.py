@@ -19,7 +19,7 @@
 from utils import db
 from model import Instance
 
-def update_instance(container_serial, **kwargs):
+def update_instance_by_serial(container_serial, **kwargs):
     db_session = db.Session()
     instance_query_res = db_session.query(Instance).filter(\
             Instance.container_serial == container_serial).first()
@@ -28,13 +28,13 @@ def update_instance(container_serial, **kwargs):
     db_session.commit()
 
 def update_status_by_serial(container_serial, status):
-    update_instance(container_serial, status=status)
+    update_instance_by_serial(container_serial, status=status)
 
 def update_host_by_serial(container_serial, host):
-    update_instance(container_serial, host=host)
+    update_instance_by_serial(container_serial, host=host)
 
 def update_port_by_serial(container_serial, port):
-    update_instance(container_serial, port=port)
+    update_instance_by_serial(container_serial, port=port)
 
 def create_instance(ins):
     db_session = db.Session()
