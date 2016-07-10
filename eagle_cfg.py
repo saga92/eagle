@@ -19,9 +19,10 @@ SECRET_KEY = 'development key'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 ##log configuration
-LOG_PATH = '/home/bhe/proj/eagle'
+LOG_PATH = './'
 
 ##local configuration
 CREATE_INSTANCE = 1
 STOP_INSTANCE = 2
 REMOVE_INSTANCE = 3
+RESTART_INSTANCE = 4

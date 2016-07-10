@@ -1,43 +1,180 @@
-<div ng-controller="navigateBar">
-  <ul>
-    <li><a href="/#/">index</a></li>
-    <li ng-show="!isLogin"><a href="#/signin">sign in</a></li>
-    <li><a href="#/signup">sign up</a></li>
-    <li ng-show="isLogin"><a href="/signout">sign out</a></li>
-  </ul>
+<div id="wrapper">
 
-  <div ng-show="isLogin" ng-controller="showDashboard">
-    <div>tips: {{ popup }}</div>
-    <p>Create your container:</p>
-    <form >
-        <select ng-model="selectedImage" ng-options="img.name for img in images">
-        </select>
-        <input type="text" name="containerName" ng-model="containerName"/>
-        <button ng-click="createIns()">create</button>
-        
-    </form>
-    <p>Instance dashboard:</p>
-    <table>
-      <tr>
-        <th>vm serial</th> 
-        <th>image_id</th>
-        <th>host</th>
-        <th>port</th>
-        <th>status</th>
-        <th>operate</th>
-      </tr>
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/#/">Eagle</a>
+        </div>
+        <!-- Top Menu Items -->
+        <ul class="nav navbar-right top-nav" ng-controller="getUsername">
+            <li class="dropdown">
+                <a href="/#/" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
+                <ul class="dropdown-menu message-dropdown">
+                    <li class="message-preview">
+                        <a href="/#/">
+                            <div class="media">
+                                <span class="pull-left">
+                                    <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                </span>
+                                <div class="media-body">
+                                    <h5 class="media-heading"><strong>{{signInUsername}}</strong>
+                                    </h5>
+                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                    <p>Hey I share my images for caffe...</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                   
+                    <li class="message-preview">
+                        <a href="/#/">
+                            <div class="media">
+                                <span class="pull-left">
+                                    <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                </span>
+                                <div class="media-body">
+                                    <h5 class="media-heading"><strong>{{signInUsername}}</strong>
+                                    </h5>
+                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                    <p>Hey I share my images for caffe...</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="message-footer">
+                        <a href="/#/">Read All New Messages</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="/#/" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
+                <ul class="dropdown-menu alert-dropdown">
+                    <li>
+                        <a href="/#/">successful c... <span class="label label-success">SUCCESS</span></a>
+                    </li>
+                    <li>
+                        <a href="/#/">cluster working <span class="label label-info">INFO</span></a>
+                    </li>
+                    <li>
+                        <a href="/#/">fail to restart... <span class="label label-danger">ERROR</span></a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="/#/">View All</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="/#/" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{signInUsername}} <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/#/"><i class="fa fa-fw fa-user"></i> Profile</a>
+                    </li>
+                    <li>
+                        <a href="/#/"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+                    </li>
+                    <li>
+                        <a href="/#/"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="/signout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li class="active">
+                    <a href="/#/"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                </li>
+                
+                <li>
+                    <a href="/#/"><i class="fa fa-fw fa-table"></i> Tables</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
 
-      <tr ng-repeat="instance in instances">
-        <td>{{instance.container_serial}}</td>
-        <td>{{instance.image_id}}</td> 
-        <td>{{instance.host}}</td>
-        <td>{{instance.port}}</td>
-        <td>{{instance.status}}</td>
-        <td>
-          <button ng-click="stopIns(instance.container_serial)">stop</button>
-          <button ng-click="rmIns(instance.container_serial)">remove</button>
-        </td>
-      </tr>
-    </table>
-  </div>
+    <div id="page-wrapper">
+
+        <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">
+                        Dashboard <small>Statistics Overview</small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li class="active">
+                            <i class="fa fa-dashboard"></i> Dashboard
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel">
+                        <div>
+                              <div ng-controller="showDashboard">
+                                  <div>tips: {{ popup }}</div>
+                                  <p>Create your container:</p>
+                                  <form >
+                                      <select ng-model="selectedImage" ng-options="img.name for img in images">
+                                      </select>
+                                      <input type="text" name="containerName" ng-model="containerName"/>
+                                      <button ng-click="createIns()">create</button>
+                                      
+                                  </form>
+                                  <p>Instance dashboard:</p>
+                                  <table class="table table-striped">
+                                    <tr>
+                                      <th>#</th>
+                                      <th>vm serial</th> 
+                                      <th>vm name</th>
+                                      <th>image_id</th>
+                                      <th>host</th>
+                                      <th>port</th>
+                                      <th>status</th>
+                                      <th>operate</th>
+                                    </tr>
+
+                                    <tr ng-repeat="instance in instances">
+                                      <td>#</td>
+                                      <td>{{instance.container_serial}}</td>
+                                      <td>{{instance.container_name}}</td>
+                                      <td>{{instance.image_id}}</td> 
+                                      <td>{{instance.host}}</td>
+                                      <td>{{instance.port}}</td>
+                                      <td>{{instance.status}}</td>
+                                      <td>
+                                        <button ng-click="stopIns(instance.container_serial)">stop</button>
+                                        <button ng-click="rmIns(instance.container_serial)">remove</button>
+                                      </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- /#page-wrapper -->
+
 </div>
+<!-- /#wrapper -->

@@ -6,6 +6,7 @@ import uuid
 import imp
 import os
 import time
+from utils.log import worker_logger
 
 class MessageQueue(object):
 
@@ -52,15 +53,18 @@ class WorkerQueue(MessageQueue):
     def __init__(self):
         super(WorkerQueue, self).__init__()
         self.channel.queue_declare(queue='eagle')
+        self.handler = None
 
-    def run(self, message):
-        """
-        must return response
-        """
-        pass
+    def set_handler(self, handler):
+        if self.handler is not None:
+            worker_logger.warn('reset handler')
+        self.handler = handler
+
+    def receive(self, message):
+        return self.handler(message)
 
     def on_request(self, ch, method, props, body):
-        response = self.run(body)
+        response = self.receive(body)
         ch.basic_publish(exchange='',
                 routing_key=props.reply_to,
                 properties=pika.BasicProperties(correlation_id = \
@@ -72,6 +76,7 @@ class WorkerQueue(MessageQueue):
         self.channel.basic_qos(prefetch_count=1)
         self.channel.basic_consume(self.on_request, queue='eagle')
         try:
+            worker_logger.info('Worker is running...')
             self.channel.start_consuming()
         except KeyboardInterrupt as e:
             self.stop_consuming()

@@ -9,5 +9,5 @@ if eagle_home is None:
     print('FATAL ERROR: eagle home env not set')
     exit(1)
 
-from log import eagle_logger
+from log import eagle_logger, worker_logger, ui_logger
 from mq import UiQueue, WorkerQueue

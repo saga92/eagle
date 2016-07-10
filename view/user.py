@@ -52,7 +52,7 @@ def sign_in():
 def sign_out():
     session.pop('is_login', None)
     session.pop('signin_user_name', None)
-    return render_template('index.html')
+    return redirect('/')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def sign_up():
