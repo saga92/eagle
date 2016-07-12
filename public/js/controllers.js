@@ -2,7 +2,7 @@
 
 
 angular.module("app.controllers", [ ])
-    
+
     .controller("showDashboard", ['$scope', 'Session', '$http', '$window',
         function ($scope, Session, $http, $window) {
             Session.get('is_login', function(res){
@@ -23,14 +23,11 @@ angular.module("app.controllers", [ ])
                         signin_username: signInUsername
                     }
                 }).success(function(data){
-                    for(var i=0; i<data.instances.length; ++i){
-                        data.instances[i].container_serial = data.instances[i].container_serial.substring(0,10);
-                    }
                     $scope.instances = data.instances;
                     console.log($scope.instances)
                 });
             });
-            
+
             $scope.createIns=function(){
                 Session.get("signin_user_name", function(res){
                     var signInUsername = res;
@@ -42,7 +39,6 @@ angular.module("app.controllers", [ ])
                     });
 
                     $http.post(url, parameter).success(function(data){
-                        data.instance.container_serial = data.instance.container_serial.substring(0,10);
                         $scope.instances.push(data.instance);
                         $scope.popup = data.message;
                     }).error(function(data){
