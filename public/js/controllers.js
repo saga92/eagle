@@ -19,8 +19,8 @@ angular.module("app.controllers", [ ])
             ];
 
             $scope.containerName = "dev-container";
-            Session.get("signin_user_name", function(res){
-                var signInUsername = res;
+            Session.get("user_profile", function(res){
+                var signInUsername = res.username;
                 $http.get("/list_ins", {
                     params: {
                         signin_username: signInUsername
@@ -46,8 +46,8 @@ angular.module("app.controllers", [ ])
             }
 
              $scope.createIns=function(){
-                Session.get("signin_user_name", function(res){
-                    var signInUsername = res;
+                Session.get("user_profile", function(res){
+                    var signInUsername = res.username;
                     var url = "/create_ins";
                     var parameter = JSON.stringify({
                         image_id: $scope.selectedImage.id,
@@ -104,8 +104,8 @@ angular.module("app.controllers", [ ])
             };
 
             $scope.stopIns = function(containerSerial){
-                Session.get("signin_user_name", function(res){
-                    var signInUsername = res;
+                Session.get("user_profile", function(res){
+                    var signInUsername = res.username;
                     var url = "/stop_ins";
                     var parameter = JSON.stringify({
                         container_serial: containerSerial,
@@ -164,8 +164,8 @@ angular.module("app.controllers", [ ])
             };
 
             $scope.restartIns = function(containerSerial){
-                Session.get("signin_user_name", function(res){
-                    var signInUsername = res;
+                Session.get("user_profile", function(res){
+                    var signInUsername = res.username;
                     var url = "/restart_ins";
                     var parameter = JSON.stringify({
                         container_serial: containerSerial,
@@ -224,8 +224,8 @@ angular.module("app.controllers", [ ])
 
 
             $scope.rmIns = function(containerSerial){
-                Session.get("signin_user_name", function(res){
-                    var signInUsername = res;
+                Session.get("user_profile", function(res){
+                    var signInUsername = res.username;
                     var url = "/remove_ins";
                     var parameter = JSON.stringify({
                         container_serial: containerSerial,
@@ -319,8 +319,10 @@ angular.module("app.controllers", [ ])
     ])
     .controller("getUsername", ['$scope', 'Session', '$http', '$window',
         function ($scope, Session, $http, $window) {
-            Session.get("signin_user_name", function(res){
-                $scope.signInUsername = res;
+            Session.get("user_profile", function(res){
+                $scope.signId = res.id;
+                $scope.signInUsername = res.username;
+                $scope.signInPassword = res.password;
             });
         }
     ]);

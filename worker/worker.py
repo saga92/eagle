@@ -92,7 +92,7 @@ def run_container(cli, *args, **kwargs):
         inspect_res = cli.inspect_container(container_serial)
         host = inspect_res["NetworkSettings"]["IPAddress"]
         port = 22
-        update_col_by_serial(container_serial, status=worker_cfg.RUNNING_INSTANCE,\
+        update_instance_by_serial(container_serial, status=worker_cfg.RUNNING_INSTANCE,\
                 host=host, port=port)
         db_session = db.Session()
         image_query_res = db_session.query(Image).filter(\
@@ -136,7 +136,7 @@ def stop_container(cli, *args, **kwargs):
         res['code'] = '0x1'
         res['message'] = 'stop successful'
         res['container_serial'] = kwargs.get('container_serial')
-        update_col_by_serial(kwargs.get('container_serial'), status=worker_cfg.STOP_INSTANCE,\
+        update_instance_by_serial(kwargs.get('container_serial'), status=worker_cfg.STOP_INSTANCE,\
                 host='', port=0)
         worker_logger.info("succeed to stop %s." % kwargs.get('container_name'))
     return json.dumps(res)
@@ -162,7 +162,7 @@ def restart_container(cli, *args, **kwargs):
             port = 22
             res['host'] = host
             res['port'] = port
-            update_col_by_serial(kwargs.get('container_serial'), status=worker_cfg.RUNNING_INSTANCE,\
+            update_instance_by_serial(kwargs.get('container_serial'), status=worker_cfg.RUNNING_INSTANCE,\
                     host=host, port=port)
             worker_logger.info("succeed to restart %s." % kwargs.get('container_name'))
         else:
