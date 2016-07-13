@@ -73,6 +73,9 @@ class TestInstance(UnitTest):
 
     # Container name occupied by others
     def test_create_failed(self):
+        self.ins['container_name'] = '-'.join([
+            test_cfg.USER_NAME, self.ins['container_name']
+        ])
         create_instance(self.ins)
         req = dict(
             container_name=test_cfg.CONTAINER_NAME,

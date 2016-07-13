@@ -37,6 +37,7 @@ angular.module("app.controllers", [ ])
                             }
                         }
                     $scope.instances = data.instances;
+                    $scope.signInUsername = res;
                     console.log($scope.instances);
                 });
             });

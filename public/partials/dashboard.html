@@ -152,7 +152,7 @@
                                     <tr ng-repeat="instance in instances">
                                       <td>{{$index + 1}}</td>
                                       <td>{{instance.container_serial | limitTo : 10 | filterSerial}}</td>
-                                      <td>{{instance.container_name}}</td>
+                                      <td>{{instance.container_name.substring(signInUsername.length + 1)}}</td>
                                       <td>{{instance.image_name}}</td> 
                                       <td>{{instance.jump_server | filterJump}}</td>
                                       <td>{{instance.host | filterHost}}</td>

@@ -2,15 +2,19 @@
 
 echo "------------------------------"
 echo "Please Input the type of test:"
-echo -e "Tempest:--->1 \nUnit:------>2"
+echo -e "Integratetest:--->1 \nUnit:------>2"
 read type
 case ${type} in
 	1)
-		cd ./tempest && python -m unittest discover -v
+		echo "Test intergrate_test for eagle:"
+		echo "------------------------------"
+		cd ./integratetest && python -m unittest discover -v
 		rm -rf *.log
 		;;
 	2)
-		cd unit && python -m unittest discover -v
+		echo "Test unit_test for eagle"
+		echo "------------------------------"
+		cd ./unit && python -m unittest discover -v
 		rm -rf *.log
 		;;
 	*)
