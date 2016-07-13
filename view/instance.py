@@ -58,17 +58,17 @@ def create_instance():
     res = {}
     if request.method == 'POST':
         req_data = json.loads(request.data)
-        req_data['container_name'] = '-'.join([
+        container_name = '-'.join([
             req_data['user_name'], req_data['container_name']
         ])
         db_session = db.Session()
         instance_query_result = db_session.query(Instance).filter(\
-            Instance.container_name == req_data['container_name']).first()
+            Instance.container_name == container_name).first()
         if instance_query_result is None:
             policy = {}
             policy['operate'] = app.config['CREATE']
             policy['image_id'] = req_data['image_id']
-            policy['container_name'] = req_data['container_name']
+            policy['container_name'] = container_name
             policy['user_name'] = req_data['user_name']
             message = json.dumps(policy)
             ui_mq = UiQueue()
