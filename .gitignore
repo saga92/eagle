@@ -2,3 +2,5 @@
 *.log
 *.log.*
 .DS_Store
+.tox
+.idea
