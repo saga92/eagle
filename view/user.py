@@ -29,6 +29,7 @@ import random
 import datetime
 from sqlalchemy import or_
 from utils import eagle_logger
+from dao import *
 
 @app.route('/', methods=['GET', 'POST'])
 def show_dashboard():
@@ -55,7 +56,11 @@ def sign_in():
             passcode = hashlib.md5(req_data['password'] + result.salt).hexdigest()
             if result.password == passcode:
                 session['is_login'] = True
-                session['signin_user_name'] = result.username
+                user_profile = {}
+                user_profile['id'] = result.id;
+                user_profile['username'] = result.username
+                user_profile['password'] = result.password
+                session['user_profile'] = json.dumps(user_profile)
                 instances = db_session.query(Instance).all()
                 res['code'] = '0x1'
                 res['message'] = 'sign in successful'
@@ -68,7 +73,7 @@ def sign_in():
 @app.route('/signout')
 def sign_out():
     session.pop('is_login', None)
-    session.pop('signin_user_name', None)
+    session.pop('user_profile', None)
     return redirect('/')
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -98,5 +103,48 @@ def sign_up():
             db_session.commit()
             res['code'] = '0x1'
             res['message'] = 'sign up successful'
+        return jsonify(**res)
+    return render_template('index.html')
+
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    res={}
+    res['code'] = '0x1'
+    res['message'] = 'modify profile successful'
+    if request.method == 'POST':
+        eagle_logger.debug(type(request.data))
+        req_data = json.loads(request.data)
+        db_session = db.Session()
+        testid = req_data['id']
+        result = db_session.query(User).filter(User.id == testid).first()
+        req_id = result.id
+        new_username = req_data['username']
+        if new_username is not None:
+            db_session = db.Session()
+            result_User = db_session.query(User).filter(User.username == new_username).first()
+            if result_User is not None and req_id != result_User.id:
+                res['code'] = '0x4'
+                res['message'] = 'Username has been occupied by others'
+                return jsonify(**res)
+            else:
+                update_username_by_id(req_id, new_username)
+        new_email = req_data['email']
+        if new_email is not None:
+            db_session = db.Session()
+            result_User = db_session.query(User).filter(User.email == new_email).first()                   
+            if result_User is not None and req_id != result_User.id:
+                res['code'] = '0x5'
+                res['message'] = 'Email has been occupied by others'
+                return jsonify(**res)
+            else:
+                update_email_by_id(req_id, new_email)
+        new_password = req_data['password']
+        if new_password is not None:
+            timestamp = str(time.time()) + str(random.randint(10000, 20000))
+            salt = hashlib.md5(timestamp).hexdigest()
+            passcode = hashlib.md5(new_password + salt).hexdigest()
+            update_password_by_id(req_id, passcode)
+            update_salt_by_id(req_id, salt)
+        update_update_time_by_id(req_id, datetime.datetime.now())
         return jsonify(**res)
     return render_template('index.html')

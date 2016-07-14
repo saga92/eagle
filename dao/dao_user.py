@@ -18,42 +18,45 @@
 # flake8: noqa
 
 import hashlib
-from datetime import datetime
+import datetime
 from utils import db
 from model import User
 
-def update_col_by_id(id, *args, **kwargs):
+def update_user_by_id(id, *args, **kwargs):
     db_session = db.Session()
     user_query_res = db_session.query(User).filter(User.id == id).first()
     for key in kwargs:
         setattr(user_query_res, key, kwargs.get(key))
     db_session.commit()
 
+def update_username_by_id(id, username):
+    update_user_by_id(id, username=username)
+
 def update_password_by_id(id, password):
-    update_user(id, password=password)
+    update_user_by_id(id, password=password)
 
 def update_email_by_id(id, email):
-    update_user(id, email=email)
+    update_user_by_id(id, email=email)
 
 def update_salt_by_id(id, salt):
-    update_user(id, salt=salt)
+    update_user_by_id(id, salt=salt)
 
 def update_create_time_by_id(id, create_time):
-    update_user(id, create_time=create_time)
+    update_user_by_id(id, create_time=create_time)
 
 def update_update_time_by_id(id, update_time):
-    update_user(id, update_time=update_time)
+    update_user_by_id(id, update_time=update_time)
 
 def update_is_deleted_by_id(id, is_deleted):
-    update_user(id, is_deleted=is_deleted)
+    update_user_by_id(id, is_deleted=is_deleted)
 
 def create_user(user):
     db_session = db.Session()
     password = hashlib.md5(user.get('password') + user.get('salt', '')).hexdigest()
     user_res = User(user.get('username'), password,
                     email=user.get('email'), salt=user.get('salt', ''),
-                    create_time=user.get('create_time', datetime.utcnow()),
-                    update_time=user.get('update_time', datetime.utcnow()),
+                    create_time=user.get('create_time', datetime.datetime.utcnow()),
+                    update_time=user.get('update_time', datetime.datetime.utcnow()),
                     is_deleted=user.get('is_deleted', 0)
                     )
     db_session.add(user_res)
@@ -67,6 +70,14 @@ def get_user_by_username(username):
 def remove_user_by_username(username):
     db_session = db.Session()
     user_query_res = db_session.query(User).filter(User.username == username).first()
+    user_name = user_query_res.username
+    db_session.delete(user_query_res)
+    db_session.commit()
+    return user_name
+
+def remove_user_by_id(id):
+    db_session = db.Session()
+    user_query_res = db_session.query(User).filter(User.id == id).first()
     user_name = user_query_res.username
     db_session.delete(user_query_res)
     db_session.commit()

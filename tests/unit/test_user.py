@@ -11,6 +11,7 @@ from dao import *
 from view.user import *
 from eagle import app
 
+import copy
 
 class TestUser(UnitTest):
 
@@ -110,6 +111,63 @@ class TestUser(UnitTest):
     def test_signout(self):
         response = self.app.get('/signout', follow_redirects=True)
         self.assertEquals(response.status_code, 200)
+
+    #Test modify profile
+    def test_modify_profile(self):
+        create_user(self.user)
+        db_session = db.Session()
+        user_query_res = db_session.query(User).filter(User.username == test_cfg.USER_NAME).first()
+        req = dict(
+            id=user_query_res.id,
+            username='test'+test_cfg.USER_NAME,
+            password='test'+test_cfg.USER_PASSWORD,
+            email='test'+test_cfg.USER_EMAIL
+        )
+        response = self.app.post('/profile', data=json.dumps(req), follow_redirects=True)
+        remove_user_by_id(user_query_res.id)
+        res_dict = json.loads(response.data)
+        self.assertEquals(res_dict.get('code'), '0x1')
+
+    # Username occupied
+    def test_modify_username_failed(self):
+        create_user(self.user)
+        another_user = copy.deepcopy(self.user)
+        another_user['username'] = 'test'+test_cfg.USER_NAME
+        create_user(another_user)
+        db_session = db.Session()
+        user_query_res = db_session.query(User).filter(User.username == test_cfg.USER_NAME).first()
+        req = dict(
+            id=user_query_res.id,
+            username='test'+test_cfg.USER_NAME,
+            password=test_cfg.USER_PASSWORD,
+            email=test_cfg.USER_EMAIL
+        )
+        response = self.app.post('/profile', data=json.dumps(req), follow_redirects=True)
+        remove_user_by_id(user_query_res.id)
+        remove_user_by_username(another_user['username'])
+        res_dict = json.loads(response.data)
+        self.assertEquals(res_dict.get('code'), '0x4')
+
+    # Email occupied
+    def test_modify_email_failed(self):
+        create_user(self.user)
+        another_user = copy.deepcopy(self.user)
+        another_user['username'] = 'test'+test_cfg.USER_NAME
+        another_user['email'] = 'test'+test_cfg.USER_EMAIL
+        create_user(another_user)
+        db_session = db.Session()
+        user_query_res = db_session.query(User).filter(User.username == test_cfg.USER_NAME).first()
+        req = dict(
+            id=user_query_res.id,
+            username=test_cfg.USER_NAME,
+            password=test_cfg.USER_PASSWORD,
+            email='test'+test_cfg.USER_EMAIL
+        )
+        response = self.app.post('/profile', data=json.dumps(req), follow_redirects=True)
+        remove_user_by_id(user_query_res.id)
+        remove_user_by_username(another_user['username'])
+        res_dict = json.loads(response.data)
+        self.assertEquals(res_dict.get('code'), '0x5')
 
 if __name__ == '__main__':
     unittest.main()

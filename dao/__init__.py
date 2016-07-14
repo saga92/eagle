@@ -17,8 +17,5 @@
 # -*- coding: utf-8 -*-
 # flake8: noqa
 
-from dao_instance import update_col_by_serial,\
-        update_status_by_serial,\
-        update_host_by_serial, update_port_by_serial,\
-        create_instance, remove_instance_by_serial
+from dao_instance import *
 from dao_user import *
