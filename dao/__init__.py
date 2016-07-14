@@ -15,6 +15,7 @@
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# flake8: noqa
 
 from dao_instance import update_col_by_serial,\
         update_status_by_serial,\

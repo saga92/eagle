@@ -15,6 +15,7 @@
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# flake8: noqa
 
 from . import Base
 from sqlalchemy import Column, Integer, String, DateTime

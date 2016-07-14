@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- cooding: utf-8 -*-
+# flake8: noqa
 
 import unittest
 
