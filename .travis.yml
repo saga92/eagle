@@ -11,14 +11,13 @@ services:
 addons:
       postgresql: "9.3"
 
+install: 
+        - "pip install tox"
 env:
     DB_HOST: 127.0.0.1
     DB_PORT: 5432
     DB_USER: root
     DB_WD: root
-
-install: 
-    - "pip install -r requirements.txt"
 
 before_script:
     #Set postgreSQL password for root user
@@ -28,8 +27,7 @@ before_script:
     - PGPASSWORD=root psql -Uroot -h127.0.0.1 -p5432 -d eagle < ./schema.sql
 
 script:
-    - source ./env.sh
-    - python -m unittest discover -v -s ./tests/unit -p "test_*.py"
+    - tox
 
 branches:
   only:

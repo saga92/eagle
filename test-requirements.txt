@@ -3,4 +3,5 @@ SQLAlchemy
 pg8000
 pika
 docker-py
-tox
+mock>=2.0
+flake8

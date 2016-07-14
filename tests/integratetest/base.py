@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- cooding: utf-8 -*-
-
+# flake8: noqa
 
 import random
 import string
 import unittest
 
 from utils import eagle_logger
+
 
 
 

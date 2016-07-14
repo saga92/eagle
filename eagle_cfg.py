@@ -15,6 +15,7 @@
 
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
+# flake8: noqa
 
 ##db configuration
 DB_HOST = '127.0.0.1'

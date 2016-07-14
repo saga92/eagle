@@ -15,6 +15,7 @@
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# flake8: noqa
 
 from utils import db
 from model import Instance

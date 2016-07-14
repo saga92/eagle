@@ -15,6 +15,7 @@
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# flake8: noqa
 
 from eagle import app
 from flask import request, render_template, url_for, session, flash, redirect, jsonify

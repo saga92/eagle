@@ -15,6 +15,7 @@
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# flake8: noqa
 
 DOCKER_CLI_URL = 'unix://var/run/docker.sock'
 

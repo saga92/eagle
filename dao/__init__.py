@@ -15,6 +15,7 @@
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# flake8: noqa
 
 from dao_instance import *
 from dao_user import *
